@@ -4,7 +4,7 @@ With the **knitr** package, you have control over every piece of output from you
 
 Consider this code chunk with one line of code:
 
-````md
+```` {.md}
 ```{r}`r ''`
 1 + 1
 ```
@@ -30,7 +30,7 @@ function(x, options) {
 
 So the final output of the above code chunk is:
 
-````md
+```` {.md}
 ```r
 1 + 1
 ```
@@ -48,7 +48,7 @@ knitr::knit_hooks$get('output')
 # or knitr::knit_hooks$get(c('source', 'output'))
 ```
 
-Unless you are truly interested in making contributions to the **knitr** package, we do not recommend that you read the source code of these built-in hooks, which can be found in the scripts named in the form `hooks-*.R` at https://github.com/yihui/knitr/tree/master/R (e.g., `hooks-md.R` contains hooks for R Markdown documents). As a **knitr** user, it usually suffices if you know how to create custom output hooks by taking advantage of the built-in hooks. You will learn that in several examples in this chapter, and we show the basic idea below.
+Unless you are truly interested in making contributions to the **knitr** package, we do not recommend that you read the source code of these built-in hooks, which can be found in the scripts named in the form `hooks-*.R` at <https://github.com/yihui/knitr/tree/master/R> (e.g., `hooks-md.R` contains hooks for R Markdown documents). As a **knitr** user, it usually suffices if you know how to create custom output hooks by taking advantage of the built-in hooks. You will learn that in several examples in this chapter, and we show the basic idea below.
 
 A custom output hook is registered through the `set()` method on `knit_hooks`. Because this method will override the existing default hook, we recommend that you save a copy of existing hook, process the output elements in your own way, and pass the results to the default hook. The usual syntax is:
 
@@ -66,23 +66,23 @@ local({
 
 Here `NAME` is the name of the hook, which can be one of the following values:
 
-- `source`: processing the source code.
+-   `source`: processing the source code.
 
-- `output`: processing text output.
+-   `output`: processing text output.
 
-- `warning`: processing warnings (usually from `warning()`).
+-   `warning`: processing warnings (usually from `warning()`).
 
-- `message`: processing messages (usually from `message()`).
+-   `message`: processing messages (usually from `message()`).
 
-- `error`: processing error messages (usually from `stop()`).
+-   `error`: processing error messages (usually from `stop()`).
 
-- `plot`: processing plot file paths.
+-   `plot`: processing plot file paths.
 
-- `inline`: processing output from inline R expressions.
+-   `inline`: processing output from inline R expressions.
 
-- `chunk`: processing output from the whole chunk.
+-   `chunk`: processing output from the whole chunk.
 
-- `document`: processing the whole document.
+-   `document`: processing the whole document.
 
 The meaning of the argument `x` in the hook functions is explained in the above list. For the `options` argument of a hook, it denotes the chunk options (as a list) for the current code chunk. For example, if you set `foo = TRUE` on a chunk, you can obtain its value via `options$foo` in the hook. The `options` argument is not available to the `inline` and `document` hooks.
 
@@ -102,7 +102,7 @@ The key part in the above `source` hook is this line, which matches the trailing
 x <- x[!grepl('# SECRET!!$', x)]
 ```
 
-Precisely speaking, the above hook will exclude whole _expressions_ containing the trailing comment `# SECRET!!`, instead of individual lines, because `x` is actually a vector of R expressions. For example, for the code chunk below:
+Precisely speaking, the above hook will exclude whole *expressions* containing the trailing comment `# SECRET!!`, instead of individual lines, because `x` is actually a vector of R expressions. For example, for the code chunk below:
 
 ```{r, source-hook-x, eval=FALSE}
 1 + 1
@@ -116,7 +116,6 @@ The value of `x` in the `source` hook is:
 ```{r, eval=FALSE}
 c("1 + 1", "if (TRUE) {\n  1:10\n}")
 ```
-
 
 If you want to hide lines instead of expressions of R code, you will have to split `x` into individual lines. You may consider using the function `xfun::split_lines()`. The body of the hook function will be:
 
@@ -133,7 +132,7 @@ This example shows you how to manipulate the source code string, and `grepl()` i
 
 In this section, we show an example of defining a `source` hook to add line numbers as comments to the source code. For example, for this code chunk:
 
-````md
+```` {.md}
 ```{r}`r ''`
 if (TRUE) {
   x <- 1:10
@@ -167,7 +166,7 @@ The method introduced in Section \@ref(number-lines) may be the actual way in wh
 
 In Section \@ref(html-scroll), we showed how to restrict the heights of code blocks and text output blocks via CSS. In fact, there is a simpler method with the chunk options `attr.source` and `attr.output` to add the `style` attribute to the fenced code blocks in the Markdown output. For example, for this code chunk with the `attr.output` option:
 
-````md
+```` {.md}
 ```{r, attr.output='style="max-height: 100px;"'}`r ''`
 1:300
 ```
@@ -175,7 +174,7 @@ In Section \@ref(html-scroll), we showed how to restrict the heights of code blo
 
 Its Markdown output will be:
 
-````md
+```` {.md}
 ```r
 1:300
 ```
@@ -189,7 +188,7 @@ Its Markdown output will be:
 
 Then the text output block will be converted to HTML by Pandoc:
 
-```html
+``` {.html}
 <pre style="max-height: 100px;">
 <code>##   [1]   1   2   3   4   5   6   7   8   9  10
 ##  [11]  11  12  13  14  15  16  17  18  19  20
@@ -197,7 +196,7 @@ Then the text output block will be converted to HTML by Pandoc:
 </pre>
 ```
 
-To learn more about Pandoc's fenced code blocks, please read its manual at https://pandoc.org/MANUAL.html#fenced-code-blocks.
+To learn more about Pandoc's fenced code blocks, please read its manual at <https://pandoc.org/MANUAL.html#fenced-code-blocks>.
 
 The `attr.source` and `attr.output` options have made it possible for us to specify maximum heights for individual code chunks. However, the syntax is a little clunky, and requires a better understanding of CSS and Pandoc's Markdown syntax. Below we show an example of a custom `output` hook that works with a custom chunk option `max.height`, so you will only need to set the chunk option like `max.height = "100px"` instead of `attr.output = 'style="max-height: 100px;"'`. In this example, we only manipulate the `options` argument, but not the `x` argument.
 
@@ -256,7 +255,7 @@ knitr::knit_hooks$set(output = hook_output)
 
 As an exercise to readers, you may try to truncate the output in a different way: given the chunk option `out.lines` to determine the maximum number of lines, can you truncate the output in the middle instead of the end? For example, if `out.lines = 10`, you extract the first and last five lines, and add `....` in the middle like this:
 
-```text
+``` {.text}
 ##    speed dist
 ## 1      4    2
 ## 2      4   10
@@ -284,7 +283,7 @@ knitr::include_graphics("images/hook-html5.png", dpi = NA)
 
 This example shows you what you can possibly do with the plot file path `x` in the `plot` hook. If all you need is to customize the style of figures, you do not have to use the HTML5 tags. Usually the default `plot` hook will output images in the HTML code like this:
 
-```html
+``` {.html}
 <div class="figure">
   <img src="PATH" />
   <p class="caption">CAPTION</p>

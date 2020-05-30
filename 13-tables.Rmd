@@ -2,11 +2,11 @@
 
 Tables are one of the primary ways in which we can communicate results in a report. You may often desire to tweak their appearance to suit your particular needs. In this chapter, we will introduce techniques that can be used to customize tables. This chapter aims to:
 
-- Show all features of the table-generating function `knitr::kable()`.
+-   Show all features of the table-generating function `knitr::kable()`.
 
-- Highlight more advanced customization of tables using the the **kableExtra** package.
+-   Highlight more advanced customization of tables using the the **kableExtra** package.
 
-- Provide a list of other packages that can be used to produce tables.
+-   Provide a list of other packages that can be used to produce tables.
 
 ## The function `knitr::kable()` {#kable}
 
@@ -27,6 +27,7 @@ kat = function(x, ...) {
   cat(x, sep = '\n')
 }
 ```
+
 ```{r comment='', render=kat, class.output='md'}
 knitr::kable(head(mtcars[, 1:4]), 'pandoc')
 ```
@@ -36,9 +37,11 @@ You can also generate tables in Markdown, HTML, LaTeX, reStructuredText:
 ```{r comment='', render=kat, class.output='md'}
 knitr::kable(head(mtcars[, 1:4]), 'markdown')
 ```
+
 ```{r comment='', render=kat, class.output='html'}
 knitr::kable(mtcars[1:2, 1:2], 'html')
 ```
+
 ```{r comment='', render=kat, class.output='tex'}
 knitr::kable(head(mtcars[, 1:4]), 'latex')
 ```
@@ -162,7 +165,6 @@ knitr:::escape_latex(c('100%', '# a comment', 'column_name'))
 knitr:::escape_html(c('<attention>', 'x = "character"', 'a & b'))
 ```
 
-
 ### Multiple tables side by side
 
 You can pass a list of data frames or matrices to `kable()` to generate multiple tables side by side. For example, Table \@ref(tab:two-tables) contains two tables generated from the code below:
@@ -186,7 +188,7 @@ One common confusion about `kable()` is that it does not work inside `for`-loops
 
 You may expect the following code chunk to generate three tables, but it will not:
 
-````md
+```` {.md}
 ```{r}`r ''`
 for (i in 1:3) {
   knitr::kable(head(iris))
@@ -196,7 +198,7 @@ for (i in 1:3) {
 
 You have to explicitly print the `kable()` results, and apply the chunk option `results = 'asis'`, e.g.,
 
-````md
+```` {.md}
 ```{r, results='asis'}`r ''`
 for (i in 1:3) {
   print(knitr::kable(head(iris)))
@@ -206,7 +208,7 @@ for (i in 1:3) {
 
 In general, when you generate output from a `for`-loop, we recommend that you add a few line breaks (`\n`) or an HTML comment (`<!-- -->`) after each output element to clearly separate all output elements, e.g.,
 
-````md
+```` {.md}
 ```{r, results='asis'}`r ''`
 for (i in 1:3) {
   print(knitr::kable(head(iris), caption = 'A caption.'))
@@ -217,7 +219,7 @@ for (i in 1:3) {
 
 Without the separators, Pandoc may be fail to detect the individual elements. For example, when a plot is followed immediately by a table, the table will not be recognized:
 
-```md
+``` {.md}
 ![](logo.png)
                       mpg   cyl   disp    hp
 ------------------  -----  ----  -----  ----
@@ -227,7 +229,7 @@ Mazda RX4 Wag        21.0     6    160   110
 
 But it will be if there is a clear separation like (note that we added an empty line below the image):
 
-```md
+``` {.md}
 ![](logo.png)
 
                       mpg   cyl   disp    hp
@@ -238,7 +240,7 @@ Mazda RX4 Wag        21.0     6    160   110
 
 or
 
-```md
+``` {.md}
 ![](logo.png)
 
 <!-- -->
@@ -259,7 +261,7 @@ knitr::kable(iris2, format = 'latex', booktabs = TRUE)
 
 When you assign a caption to a table (see Section \@ref(kable-caption)), `kable()` will use the `table` environment to include the table, i.e.,
 
-```latex
+``` {.latex}
 \begin{table}
 % the table body (usually the tabular environment)
 \end{table}
@@ -285,7 +287,7 @@ knitr::kable(iris2, caption = 'A long long long caption!', caption.short = 'A sh
 
 The short caption goes into the square brackets of the `\caption[]{}` command in LaTeX, and is often used in the List of Tables of the PDF output document (if the short caption is not provided, the full caption is displayed there).
 
-If you are familiar with the LaTeX package [**booktabs**](https://ctan.org/pkg/booktabs) for publication quality tables, you can set `booktabs = TRUE`, e.g.,
+If you are familiar with the LaTeX package **[booktabs](https://ctan.org/pkg/booktabs)** for publication quality tables, you can set `booktabs = TRUE`, e.g.,
 
 ```{r, render=if (!knitr::is_latex_output()) kat, comment='', class.output='tex'}
 iris3 = head(iris, 10)
@@ -296,21 +298,21 @@ Please note that when you need additional LaTeX packages such as **booktabs** fo
 
 Depending on whether the argument `booktabs` is `TRUE` or `FALSE` (default), the table appearance is different. For `booktabs = FALSE`:
 
-- Table columns are separated by vertical lines. You can explicitly remove the vertical lines via the `vline` argument, e.g., `knitr::kable(iris, vline = "")` (the default is `vline = "|"`). You can set this option as a global R option so you do not need to set it for every single table, e.g., `options(knitr.table.vline = "")`.
+-   Table columns are separated by vertical lines. You can explicitly remove the vertical lines via the `vline` argument, e.g., `knitr::kable(iris, vline = "")` (the default is `vline = "|"`). You can set this option as a global R option so you do not need to set it for every single table, e.g., `options(knitr.table.vline = "")`.
 
-- The horizontal lines can be defined via arguments `toprule`, `midrule`, `linesep`, and `bottomrule`. Their default values are all `\hline`.
+-   The horizontal lines can be defined via arguments `toprule`, `midrule`, `linesep`, and `bottomrule`. Their default values are all `\hline`.
 
 For `booktabs = TRUE`:
 
-- There are no vertical lines in the table, but you can add these lines via the `vline` argument.
+-   There are no vertical lines in the table, but you can add these lines via the `vline` argument.
 
-- The table only has horizontal lines for the table header and the bottom row. The default argument values are `toprule = "\\toprule"`, `midrule = "\\midrule"`, and `bottomrule = "\\bottomrule"`. A line space is added to every five rows by default. This is controlled by the argument `linesep`, which defaults to `c("", "", "", "", "\\addlinespace")`. If you want to add a space to every three rows, you can do this:
+-   The table only has horizontal lines for the table header and the bottom row. The default argument values are `toprule = "\\toprule"`, `midrule = "\\midrule"`, and `bottomrule = "\\bottomrule"`. A line space is added to every five rows by default. This is controlled by the argument `linesep`, which defaults to `c("", "", "", "", "\\addlinespace")`. If you want to add a space to every three rows, you can do this:
 
 ```{r, render=if (!knitr::is_latex_output()) kat, comment='', class.output='tex'}
 knitr::kable(iris3, format = 'latex', linesep = c('', '', '\\addlinespace'), booktabs = TRUE)
 ```
 
-Sometimes your table may be longer than a page. In this case, you can use the argument `longtable = TRUE`, which uses the LaTeX package [**longtable**](https://ctan.org/pkg/longtable) to span your table to multiple pages.
+Sometimes your table may be longer than a page. In this case, you can use the argument `longtable = TRUE`, which uses the LaTeX package **[longtable](https://ctan.org/pkg/longtable)** to span your table to multiple pages.
 
 Tables are center-aligned by default when they are included in a table environment (i.e., when the table has a caption). If you do not want to center a table, use the argument `centering = FALSE`.
 
@@ -326,15 +328,15 @@ knitr::kable(mtcars[1:2, 1:2], table.attr = 'class="striped"', format = "html")
 
 We added a class `striped` to the table. However, a class name is not enough to change the appearance of a table. You have to define CSS rules for the class. For example, to make a striped table that has different colors for odd and even rows, you can add a lightgray background to even or odd rows:
 
-```css
+``` {.css}
 .striped tr:nth-child(even) { background: #eee; }
 ```
 
 The above CSS rule means all rows (i.e., the `<tr>` tags) with even row numbers (`:nth-child(even)`) that are children of an element with the `striped` class will have a background color `#eee`.
 
-A little bit CSS can make a plain HTML table look decent. Figure \@ref(fig:striped-table) is a screenshot of an HTML table to which the following CSS rules are applied: 
+A little bit CSS can make a plain HTML table look decent. Figure \@ref(fig:striped-table) is a screenshot of an HTML table to which the following CSS rules are applied:
 
-```css
+``` {.css}
 table {
   margin: auto;
   border-top: 1px solid #666;
@@ -353,7 +355,7 @@ knitr::include_graphics('images/striped-table.png', dpi = NA)
 
 The **kableExtra** package [@R-kableExtra] is designed to extend the basic functionality of tables produced using `knitr::kable()` (see Section \@ref(kable)). Since `knitr::kable()` is simple by design (please feel free to read this as "Yihui is lazy"), it definitely has a lot of missing features that are commonly seen in other packages, and **kableExtra** has filled the gap perfectly. The most amazing thing about **kableExtra** is that most of its table features work for both HTML and PDF formats (e.g., making striped tables like the one in Figure \@ref(fig:striped-table)).
 
-This package can be installed from CRAN as usual, or you may try the development version on GitHub (https://github.com/haozhu233/kableExtra):
+This package can be installed from CRAN as usual, or you may try the development version on GitHub (<https://github.com/haozhu233/kableExtra>):
 
 ```{r, eval=FALSE}
 # install from CRAN
@@ -363,7 +365,7 @@ install.packages("kableExtra")
 remotes::install_github("haozhu233/kableExtra")
 ```
 
-It has extensive documentation at https://haozhu233.github.io/kableExtra/, which provides a lot of examples on how the `kable()` output can be customized for either HTML or LaTeX output. We recommend that you read its documentation by yourself, and will only present a handful of examples in this section.
+It has extensive documentation at <https://haozhu233.github.io/kableExtra/>, which provides a lot of examples on how the `kable()` output can be customized for either HTML or LaTeX output. We recommend that you read its documentation by yourself, and will only present a handful of examples in this section.
 
 The **kableExtra** package features the pipe operator, `%>%`. You can pipe the `kable()` output to the styling functions of **kableExtra**, e.g.,
 
@@ -427,24 +429,26 @@ You will not see any differences in the above two tables if you are viewing the 
 
 ## Other packages for creating tables {#table-other}
 
-There are many other R packages that can be used to generated tables. The main reason that I introduced `kable()` (Section \@ref(kable)) and **kableExtra** (Section \@ref(kableextra)) is not that they are better than other packages, but I'm only familiar with them.^[Frankly speaking, I rarely use tables by myself, so I'm not highly motivated to learn how to create sophisticated tables.] Next I will list the packages that I'm aware of but not very familiar with. You can check them out by yourself, and decide which one fits your purpose best.
+There are many other R packages that can be used to generated tables. The main reason that I introduced `kable()` (Section \@ref(kable)) and **kableExtra** (Section \@ref(kableextra)) is not that they are better than other packages, but I'm only familiar with them.[^1] Next I will list the packages that I'm aware of but not very familiar with. You can check them out by yourself, and decide which one fits your purpose best.
 
-- **flextable** and **huxtable**: If you are looking for a table package that supports the widest range of output formats, **flextable** and **huxtable** are probably the two best choices. They all support HTML, LaTeX, and Office formats, and contain most common table features (e.g., conditional formatting). More information about **flextable** can be found at https://davidgohel.github.io/flextable/, and the documentation of **huxtable** is at https://hughjonesd.github.io/huxtable/.
+[^1]: Frankly speaking, I rarely use tables by myself, so I'm not highly motivated to learn how to create sophisticated tables.
 
-- **gt**: It allows you to compose a table by putting together different parts of the table, such as the table header (title and subtitle), the column labels, the table body, row group labels, and the table footer. Some parts are optional. You can also format numbers and add background shading to cells. Currently **gt** mainly supports HTML output. You can find more information about it at https://gt.rstudio.com.
+-   **flextable** and **huxtable**: If you are looking for a table package that supports the widest range of output formats, **flextable** and **huxtable** are probably the two best choices. They all support HTML, LaTeX, and Office formats, and contain most common table features (e.g., conditional formatting). More information about **flextable** can be found at <https://davidgohel.github.io/flextable/>, and the documentation of **huxtable** is at <https://hughjonesd.github.io/huxtable/>.
 
-- **formattable**: It provides some utility functions to format numbers (e.g., `percent()` and `accounting()`), and also functions to style table columns (e.g., format the text, annotate numbers with background shading or color bars, or add icons in cells). Like **gt**, this package also primarily supports the HTML format. You can find more information about it from its GitHub project at https://github.com/renkun-ken/formattable.
+-   **gt**: It allows you to compose a table by putting together different parts of the table, such as the table header (title and subtitle), the column labels, the table body, row group labels, and the table footer. Some parts are optional. You can also format numbers and add background shading to cells. Currently **gt** mainly supports HTML output. You can find more information about it at <https://gt.rstudio.com>.
 
-- **DT**: I think I'm familiar with this package, but I did not introduce it in a separate section because it only supports the HTML format. **DT** is built on top of the JavaScript library **DataTables**, which can turn a static table into an interactive table on an HTML page. You may sort, search, and paginate the table. **DT** also supports formatting the cells, works with Shiny to build interactive applications, and has included a large number of **DataTables** extensions (e.g., you may export the table to Excel, or interactively reorder columns). See the package repository for more information: https://github.com/rstudio/DT.
+-   **formattable**: It provides some utility functions to format numbers (e.g., `percent()` and `accounting()`), and also functions to style table columns (e.g., format the text, annotate numbers with background shading or color bars, or add icons in cells). Like **gt**, this package also primarily supports the HTML format. You can find more information about it from its GitHub project at <https://github.com/renkun-ken/formattable>.
 
-- **reactable**: It is similar to **DT** (also creates interactive tables based on a JavaScript library), but frankly speaking, it looks better than **DT** in several aspects in my eyes (such as row grouping and aggregation, and embedding HTML widgets). Had **reactable** existed in 2015, I would not have developed **DT**. That said, **reactable** does not contain all the features of **DT**, so you may read its documentation and see which one fits your purpose better: https://glin.github.io/reactable/.
+-   **DT**: I think I'm familiar with this package, but I did not introduce it in a separate section because it only supports the HTML format. **DT** is built on top of the JavaScript library **DataTables**, which can turn a static table into an interactive table on an HTML page. You may sort, search, and paginate the table. **DT** also supports formatting the cells, works with Shiny to build interactive applications, and has included a large number of **DataTables** extensions (e.g., you may export the table to Excel, or interactively reorder columns). See the package repository for more information: <https://github.com/rstudio/DT>.
 
-- **rhandsontable**: It is also like **DT**, and has an Excel feel (e.g., you can edit data directly in the table). Visit https://jrowen.github.io/rhandsontable/ to know more about it.
+-   **reactable**: It is similar to **DT** (also creates interactive tables based on a JavaScript library), but frankly speaking, it looks better than **DT** in several aspects in my eyes (such as row grouping and aggregation, and embedding HTML widgets). Had **reactable** existed in 2015, I would not have developed **DT**. That said, **reactable** does not contain all the features of **DT**, so you may read its documentation and see which one fits your purpose better: <https://glin.github.io/reactable/>.
 
-- **pixiedust**: This package features creating tables for models (such as linear models) converted through the **broom** package. It supports Markdown, HTML, and LaTeX output formats. Its repository is at https://github.com/nutterb/pixiedust.
+-   **rhandsontable**: It is also like **DT**, and has an Excel feel (e.g., you can edit data directly in the table). Visit <https://jrowen.github.io/rhandsontable/> to know more about it.
 
-- **stargazer**: It features formatting regressions models and summary statistics tables. The package is available on CRAN at https://cran.r-project.org/package=stargazer.
+-   **pixiedust**: This package features creating tables for models (such as linear models) converted through the **broom** package. It supports Markdown, HTML, and LaTeX output formats. Its repository is at <https://github.com/nutterb/pixiedust>.
 
-- **xtable**: It is perhaps the oldest package for creating tables---the first release was made in 2000. It supports both LaTeX and HTML formats. The package is available on CRAN at https://cran.r-project.org/package=xtable.
+-   **stargazer**: It features formatting regressions models and summary statistics tables. The package is available on CRAN at <https://cran.r-project.org/package=stargazer>.
 
-I'm not going to make introductions to the rest of packages, but will just list them here: **tables** (https://cran.r-project.org/package=tables), **pander** (http://rapporter.github.io/pander/), **tangram** (https://github.com/spgarbet/tangram), **ztable** (https://github.com/cardiomoon/ztable), and **condformat** (https://github.com/zeehio/condformat).
+-   **xtable**: It is perhaps the oldest package for creating tables---the first release was made in 2000. It supports both LaTeX and HTML formats. The package is available on CRAN at <https://cran.r-project.org/package=xtable>.
+
+I'm not going to make introductions to the rest of packages, but will just list them here: **tables** (<https://cran.r-project.org/package=tables>), **pander** (<http://rapporter.github.io/pander/>), **tangram** (<https://github.com/spgarbet/tangram>), **ztable** (<https://github.com/cardiomoon/ztable>), and **condformat** (<https://github.com/zeehio/condformat>).

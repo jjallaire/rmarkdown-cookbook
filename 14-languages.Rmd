@@ -1,6 +1,6 @@
 # Other Languages {#other-languages}
 
-Besides the R language, many other languages are supported in R Markdown through the **knitr** package. The language name is indicated by the first word in the curly braces after the three opening backticks. For example, the little `r` in ```` ```{r}```` indicates that the code chunk contains R code, and ```` ```{python}```` is a Python code chunk. In this chapter, we show a few languages that you may not be familiar with.
+Besides the R language, many other languages are supported in R Markdown through the **knitr** package. The language name is indicated by the first word in the curly braces after the three opening backticks. For example, the little `r` in ```` ```{r} ```` indicates that the code chunk contains R code, and ```` ```{python} ```` is a Python code chunk. In this chapter, we show a few languages that you may not be familiar with.
 
 In **knitr**, each language is supported through a language engine. Language engines are essentially functions that takes the source code and options of a chunk as the input, and returns a character string as the output. They are managed through the object `knitr::knit_engines`. You may check the existing engines via:
 
@@ -8,7 +8,7 @@ In **knitr**, each language is supported through a language engine. Language eng
 names(knitr::knit_engines$get())
 ```
 
-[Section 2.7](https://bookdown.org/yihui/rmarkdown/language-engines.html) of the R Markdown Definitive Guide [@rmarkdown2018] has shown examples of using Python, Shell, SQL, Rcpp, Stan, JavaScript, CSS, Julia, C, and Fortran code in R Markdown. In this chapter, we will show more language engines, and you may find more examples in the repository at https://github.com/yihui/knitr-examples (look for filenames that contain the word "engine").
+[Section 2.7](https://bookdown.org/yihui/rmarkdown/language-engines.html) of the R Markdown Definitive Guide [@rmarkdown2018] has shown examples of using Python, Shell, SQL, Rcpp, Stan, JavaScript, CSS, Julia, C, and Fortran code in R Markdown. In this chapter, we will show more language engines, and you may find more examples in the repository at <https://github.com/yihui/knitr-examples> (look for filenames that contain the word "engine").
 
 First, let's reveal how a language engine works by registering a custom language engine.
 
@@ -23,11 +23,11 @@ knitr::knit_engines$set(foo = function(options) {
 })
 ```
 
-This registers the `foo` engine, and you will be able to use a code chunk that starts with ```` ```{foo}````.
+This registers the `foo` engine, and you will be able to use a code chunk that starts with ```` ```{foo} ````.
 
 The engine function has one argument `options`, which is a list of chunk options of the code chunk, among which you can access the source code of the chunk as a character vector in `options$code`. For example, for the code chunk:
 
-````md
+```` {.md}
 ```{foo}`r ''`
 1 + 1
 2 + 2
@@ -48,7 +48,7 @@ knitr::knit_engines$set(upper = function(options) {
 The key is that we apply the function `toupper` to the "code", and return the result as a single character string (by concatenating all lines of code by `\n`). Note that `toupper()` is applied only when the chunk option `eval = TRUE`, otherwise the original string is returned. This shows you how to make use of chunk options like `eval` inside the engine function. Similarly, you may consider adding `if (options$results == 'hide') return()` to the function body to hide the output when the chunk option `results = 'hide'`. Below is an example chunk that uses the `upper` engine, with its output:
 
 ::: {.infobox .tip data-latex="{tip}"}
-````md
+```` {.md}
 ```{upper}`r ''`
 Hello, **knitr** engines!
 ```
@@ -59,7 +59,9 @@ Hello, **knitr** engines!
 ```
 :::
 
-Next we show an example of an alternative Python engine^[In practice, you should use the built-in `python` engine instead, which is based on the **reticulate** package and supports Python code chunks much better.] named `py` and implemented by simply calling the `python` command via `system2()`:
+Next we show an example of an alternative Python engine[^1] named `py` and implemented by simply calling the `python` command via `system2()`:
+
+[^1]: In practice, you should use the built-in `python` engine instead, which is based on the **reticulate** package and supports Python code chunks much better.
 
 ```{r, tidy=FALSE}
 knitr::knit_engines$set(py = function(options) {
@@ -73,16 +75,16 @@ knitr::knit_engines$set(py = function(options) {
 
 To fully understand the above engine function, you need to know that:
 
-1. Given Python code as a character string (`code` in the above function), we can execute the code via a command-line call `python -c 'code'`. That is what `system2()` does. We collect the (text) output by specifying `stdout = TRUE` in `system2()`.
+1.  Given Python code as a character string (`code` in the above function), we can execute the code via a command-line call `python -c 'code'`. That is what `system2()` does. We collect the (text) output by specifying `stdout = TRUE` in `system2()`.
 
-1. You can pass the chunk options, source code, and text output to the function `knitr::engine_output()` to generate the final output. This function deals with common chunk options like `echo = FALSE` and `results = 'hide'`, so you do not need to take care of these cases.
+2.  You can pass the chunk options, source code, and text output to the function `knitr::engine_output()` to generate the final output. This function deals with common chunk options like `echo = FALSE` and `results = 'hide'`, so you do not need to take care of these cases.
 
-A lot of language engines in **knitr** are defined in this way (i.e., using `system2()` to execute commands corresponding to languages). If you are curious about the technical details, you may check out the source code of most language engines in the R source code here: https://github.com/yihui/knitr/blob/master/R/engine.R.
+A lot of language engines in **knitr** are defined in this way (i.e., using `system2()` to execute commands corresponding to languages). If you are curious about the technical details, you may check out the source code of most language engines in the R source code here: <https://github.com/yihui/knitr/blob/master/R/engine.R>.
 
 Now we can use the new engine `py`, e.g.,
 
 ::: {.infobox .tip data-latex="{tip}"}
-````md
+```` {.md}
 ```{py}`r ''`
 print(1 + 1)
 ```
@@ -99,7 +101,7 @@ You can even override existing language engines via `knitr::knit_engines$set()`,
 
 As its name indicates, the `asis` engine writes out the chunk content as is. The advantage of using this engine is that you can include some content conditionally---the display of the chunk content is decided by the chunk option `echo`. When `echo = FALSE`, the chunk will be hidden. Below is a simple example:
 
-````md
+```` {.md}
 ```{r}`r ''`
 getRandomNumber <- function() {
   sample(1:6, 1)
@@ -116,7 +118,7 @@ The text in the `asis` chunk will be displayed only if the condition `getRandomN
 
 ## Execute Shell scripts {#eng-bash}
 
-You can run Shell scripts via the `bash` or `sh` or `zsh` engine, depending on which shell you prefer. Below is a `bash` example, with the chunk header ```` ```{bash}````:
+You can run Shell scripts via the `bash` or `sh` or `zsh` engine, depending on which shell you prefer. Below is a `bash` example, with the chunk header ```` ```{bash} ````:
 
 ```{bash}
 ls *.Rmd | head -n 5
@@ -124,7 +126,7 @@ ls *.Rmd | head -n 5
 
 Please note that `bash` is invoked with the R function `system2()`, and it will ignore profile files like `~/.bash_profile` and `~/.bash_login`, in which you may have defined command aliases or modified environment variables like the `PATH` variable. If you want these profile files to be executed just like when you use the terminal, you may pass the argument `-l` to `bash` via `engine.opts`, e.g.,
 
-````md
+```` {.md}
 ```{bash, engine.opts='-l'}`r ''`
 echo $PATH
 ```
@@ -140,7 +142,7 @@ You can also pass other arguments to `bash` by providing them as a character vec
 
 ## Visualization with D3 {#d3}
 
-The R package **r2d3** (https://rstudio.github.io/r2d3/) is an interface to D3 visualizations. This package can be used in R Markdown documents as well as other applications (e.g., Shiny). To use it in R Markdown, you can either call its function `r2d3()` in a code chunk, or use its `d3` engine. The latter requires you to understand the D3 library and JavaScript, which are beyond the scope of this book, and we will leave it to readers to learn them. Below is an example of using the `d3` engine to draw a bar chart:
+The R package **r2d3** (<https://rstudio.github.io/r2d3/>) is an interface to D3 visualizations. This package can be used in R Markdown documents as well as other applications (e.g., Shiny). To use it in R Markdown, you can either call its function `r2d3()` in a code chunk, or use its `d3` engine. The latter requires you to understand the D3 library and JavaScript, which are beyond the scope of this book, and we will leave it to readers to learn them. Below is an example of using the `d3` engine to draw a bar chart:
 
 `r import_example('d3.Rmd')`
 
@@ -170,8 +172,7 @@ Next we will present three examples to illustrate the use of the `cat` engine.
 
 As shown in Section \@ref(chunk-styling), you can embed a `css` code chunk in an Rmd document to style elements with CSS. An alternative way is to provide a custom CSS file to Pandoc via the `css` option of some R Markdown output formats such as `html_document`. The `cat` engine can be used to write this CSS file from Rmd.
 
-This example below shows how to generate a file `custom.css` from a chunk in the
-document, and pass the file path to the `css` option of the `html_document` format:
+This example below shows how to generate a file `custom.css` from a chunk in the document, and pass the file path to the `css` option of the `html_document` format:
 
 `r import_example("cat-css.Rmd")`
 
@@ -189,7 +190,7 @@ In the LaTeX code in the `cat` code chunk above, we have defined the header and 
 
 By default, the content of the `cat` code chunk will not be displayed in the output document. If you also want to display it after writing it out, set the chunk option `class.source` to a language name. The language name is used for syntax highlighting. In the example below, we specify the language to be `yaml`:
 
-````md
+```` {.md}
 ```{cat, engine.opts=list(file='demo.yml'), class.source='yaml'}`r ''`
 a:
   aa: "something"
@@ -223,9 +224,9 @@ unlink('demo.yml')
 
 ## Run SAS code {#eng-sas}
 
-You may run SAS (https://www.sas.com) code using the `sas` engine. You need to either make sure the SAS executable is in your environment variable `PATH`, or (if you do not know what `PATH` means) provide the full path to the SAS executable via the chunk option `engine.path`, e.g., `engine.path = "C:\\Program Files\\SASHome\\x86\\SASFoundation\\9.3\\sas.exe"`. Below is an example to print out "Hello World":
+You may run SAS (<https://www.sas.com>) code using the `sas` engine. You need to either make sure the SAS executable is in your environment variable `PATH`, or (if you do not know what `PATH` means) provide the full path to the SAS executable via the chunk option `engine.path`, e.g., `engine.path = "C:\\Program Files\\SASHome\\x86\\SASFoundation\\9.3\\sas.exe"`. Below is an example to print out "Hello World":
 
-````md
+```` {.md}
 ```{sas}`r ''`
 data _null_;
 put 'Hello, world!';
@@ -235,20 +236,20 @@ run;
 
 ## Run Stata code {#eng-stata}
 
-You can run Stata (https://www.stata.com) code with the `stata` engine if you have installed Stata. Unless the `stata` executable can be found via the environment variable `PATH`, you need to specify the full path to the executable via the chunk option `engine.path`, e.g., `engine.path = "C:/Program Files (x86)/Stata15/StataSE-64.exe"`. Below is a quick example:
+You can run Stata (<https://www.stata.com>) code with the `stata` engine if you have installed Stata. Unless the `stata` executable can be found via the environment variable `PATH`, you need to specify the full path to the executable via the chunk option `engine.path`, e.g., `engine.path = "C:/Program Files (x86)/Stata15/StataSE-64.exe"`. Below is a quick example:
 
-````md
+```` {.md}
 ```{stata}`r ''`
 sysuse auto
 summarize
 ```
 ````
 
-The `stata` engine in **knitr** is quite limited. Doug Hemken has substantially extended it in the **Statamarkdown** package, which is available on GitHub at https://github.com/Hemken/Statamarkdown. You may find tutorials about this package by searching online for "Stata R Markdown".
+The `stata` engine in **knitr** is quite limited. Doug Hemken has substantially extended it in the **Statamarkdown** package, which is available on GitHub at <https://github.com/Hemken/Statamarkdown>. You may find tutorials about this package by searching online for "Stata R Markdown".
 
 ## Create graphics with Asymptote {#eng-asy}
 
-Asymptote (https://asymptote.sourceforge.io) is a powerful language for vector graphics. You may write and run Asymptote code in R Markdown with the `asy` engine if you have installed Asymptote (see its website for instructions on the installation). Below is an example copied from the repository https://github.com/vectorgraphics/asymptote, and its output is shown in Figure \@ref(fig:elevation):
+Asymptote (<https://asymptote.sourceforge.io>) is a powerful language for vector graphics. You may write and run Asymptote code in R Markdown with the `asy` engine if you have installed Asymptote (see its website for instructions on the installation). Below is an example copied from the repository <https://github.com/vectorgraphics/asymptote>, and its output is shown in Figure \@ref(fig:elevation):
 
 ```{asy, elevation, fig.cap='A 3D graph made with Asymptote.', cache=TRUE, fig.retina=1, eval=is.na(Sys.getenv('CI', NA))}
 import graph3;
@@ -273,9 +274,7 @@ grid3(XYZgrid);
 
 Note that for PDF output, you may need some additional LaTeX packages, otherwise you may get an error that looks like this:
 
-```
-! LaTeX Error: File `ocgbase.sty' not found.
-```
+    ! LaTeX Error: File `ocgbase.sty' not found.
 
 If such an error occurs, please see Section \@ref(install-latex-pkgs) for how to install the missing LaTeX packages.
 
@@ -324,9 +323,9 @@ unlink('sine.csv')
 
 ## Style HTML pages with Sass/SCSS {#eng-sass}
 
-Sass (https://sass-lang.com) is a CSS extension language that allows you to create CSS rules in much more flexible ways than you'd do with plain CSS. Please see its official documentation if you are interested in learning it.
+Sass (<https://sass-lang.com>) is a CSS extension language that allows you to create CSS rules in much more flexible ways than you'd do with plain CSS. Please see its official documentation if you are interested in learning it.
 
-The R package **sass** [@R-sass] can be used to compile Sass to CSS. Based on the **sass** package, [Emily Riederer contributed](https://github.com/yihui/knitr/pull/1666) two language engines to **knitr**, `sass` and `scss` (corresponding to the Sass and SCSS syntax, respectively), to compile code chunks to CSS. Below is a `scss` code chunk, with the chunk header ```` ```{scss}````:
+The R package **sass** [@R-sass] can be used to compile Sass to CSS. Based on the **sass** package, [Emily Riederer contributed](https://github.com/yihui/knitr/pull/1666) two language engines to **knitr**, `sass` and `scss` (corresponding to the Sass and SCSS syntax, respectively), to compile code chunks to CSS. Below is a `scss` code chunk, with the chunk header ```` ```{scss} ````:
 
 ```{scss}
 $font-stack: "Comic Sans MS", cursive, sans-serif;
@@ -340,7 +339,7 @@ $primary-color: #00FF00;
 
 You can also use the `sass` engine, and the Sass syntax is slightly different with the SCSS syntax, e.g.,
 
-````md
+```` {.md}
 ```{sass}`r ''`
 $font-stack: "Comic Sans MS", cursive, sans-serif
 $primary-color: #00FF00

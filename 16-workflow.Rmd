@@ -56,7 +56,7 @@ Besides, you can press `F7` to spellcheck your document. You can also restart th
 
 If you use the RStudio IDE, you can press the key `F7` or click the menu `Edit -> Check Spelling` to spell check an Rmd document. Real-time spell checking has become available in RStudio v1.3, so you no longer need to manually trigger spell checking with this version or a greater version of RStudio.
 
-If you do not use RStudio, the **spelling** package (https://github.com/ropensci/spelling) has a function `spell_check_files()`, which can check the spelling of common document formats, including R Markdown. When spell checking Rmd documents, it will skip code chunks and only check ordinary text.
+If you do not use RStudio, the **spelling** package (<https://github.com/ropensci/spelling>) has a function `spell_check_files()`, which can check the spelling of common document formats, including R Markdown. When spell checking Rmd documents, it will skip code chunks and only check ordinary text.
 
 ## Render R Markdown with `rmarkdown::render()` {#rmarkdown-render}
 
@@ -72,7 +72,7 @@ for (state in state.name) {
 
 The output filename will be different for each state. You can also make use of the `state` variable in the document `input.Rmd`, e.g.,
 
-````md
+``` {.md}
 ---
 title: "A report for `r knitr::inline_expr('state')`"
 output: html_document
@@ -80,7 +80,7 @@ output: html_document
 
 The area of `r knitr::inline_expr('state')` is `r knitr::inline_expr('state.area[state.name == state]')`
 square miles.
-````
+```
 
 You may read the help page `?rmarkdown::render` to know other possible arguments. Here we just want to mention two of them, i.e., the `clean` and `envir` arguments. The former (`clean`) is particularly helpful for debugging when anything goes wrong with the Pandoc conversion. If you call `rmarkdown::render(..., clean = FALSE)`, all intermediate files will be preserved, including the intermediate `.md` file knitted from the `.Rmd` file. If Pandoc signals an error, you may start debugging from this `.md` file. The latter (`envir`) offers a way to render a document with the guarantee of an empty new environment when you call `rmarkdown::render(..., envir = new.env())`.
 
@@ -96,7 +96,7 @@ for (state in state.name) {
 
 Then in `input.Rmd`, the object `params` will be a list that contains the `state` variable:
 
-````md
+``` {.md}
 ---
 title: "A report for `r knitr::inline_expr('params$state')`"
 output: html_document
@@ -105,11 +105,11 @@ output: html_document
 The area of `r knitr::inline_expr('params$state')` is
 `r knitr::inline_expr('state.area[state.name == params$state]')`
 square miles.
-````
+```
 
 Another way to specify parameters for a report is to use the YAML field `params`, e.g.,
 
-```yaml
+``` {.yaml}
 ---
 title: Parameterized reports
 output: html_document
@@ -168,13 +168,13 @@ For more information on parameterized reports, you may read [Chapter 15](https:/
 
 When you click the `Knit` button in RStudio, it will call the `rmarkdown::render()` function in a new R session and output a file of the same base name as the input file in the same directory. For example, knitting `example.Rmd` with the output format `html_document` will create an output file `example.html`.
 
-There may be situations in which we want to customize how the document is rendered. For example, perhaps we would like the rendered document to contain the current date, or would like to output the compiled report into a different directory. Although we can achieve these goals by calling `rmarkdown::render()` (see Section \@ref(rmarkdown-render)) with the appropriate `output_file` argument, it can be inconvenient to have to rely on a custom call to `rmarkdown::render() to compile your report.
+There may be situations in which we want to customize how the document is rendered. For example, perhaps we would like the rendered document to contain the current date, or would like to output the compiled report into a different directory. Although we can achieve these goals by calling `rmarkdown::render()` (see Section \@ref(rmarkdown-render)) with the appropriate `output_file` argument, it can be inconvenient to have to rely on a custom call to \`rmarkdown::render() to compile your report.
 
 It is possible to control the behavior of the `Knit` button by providing the `knit` field within the YAML frontmatter of your document. The field takes a function with the main argument `input` (the path to the input Rmd document) and other arguments that are currently ignored. You can either write the source code of the function directly in the `knit` field, or put the function elsewhere (e.g., in an R package) and call the function in the `knit` field. If you routinely need the custom `knit` function, we would recommend that you put it in a package, instead of repeating its source code in every single R Markdown document.
 
 If you store the code directly within YAML, you must wrap the entire function in parentheses. If the source code has multiple lines, you have to indent all lines (except the first line) by at least two spaces. For example, if we want the output filename to include the date on which it is rendered, we could use the following YAML code:
 
-```yaml
+``` {.yaml}
 ---
 knit: (function(input, ...) {
     rmarkdown::render(
@@ -186,7 +186,7 @@ knit: (function(input, ...) {
     )
   })
 ---
-``` 
+```
 
 For example, if we knit `example.Rmd` on 2019-07-29, the output filename will be `example-2019-07-29.html`.
 
@@ -209,8 +209,8 @@ knit_with_date <- function(input, ...) {
 ```
 
 If you add the above code to a package named **myPackage**, you will be able to refer to your custom `knit` function using the following YAML setting:
-  
-```yaml
+
+``` {.yaml}
 ---
 knit: myPackage::knit_with_date
 ---
@@ -220,17 +220,17 @@ You may refer to the help page `?rmarkdown::render` to find out more ideas on ho
 
 ## Collaborative editing of Rmd documents through Google Drive {#google-drive}
 
-Based on the **googledrive** package, Emily Kothe provided a few wrapper functions in the **rmdrive** package, which is currently available only on GitHub at https://github.com/ekothe/rmdrive. At the time of writing, it still lacks rich documentation, so I recommend that you try Janosch Linkersdörfer's fork instead: https://github.com/januz/rmdrive (which is based on Ben Marwick's fork---if you still have not learned GIT, you may be motivated by these examples of freely forking and improving other people's GIT repositories).
+Based on the **googledrive** package, Emily Kothe provided a few wrapper functions in the **rmdrive** package, which is currently available only on GitHub at <https://github.com/ekothe/rmdrive>. At the time of writing, it still lacks rich documentation, so I recommend that you try Janosch Linkersdörfer's fork instead: <https://github.com/januz/rmdrive> (which is based on Ben Marwick's fork---if you still have not learned GIT, you may be motivated by these examples of freely forking and improving other people's GIT repositories).
 
 The workflow with **rmdrive** is outlined below:
 
-1. We assume there is a main author or contributor of the project, who is capable of using version control tools like GIT. The main author writes the initial version of the Rmd document, and upload it to Google Drive via the `upload_rmd()` function.
+1.  We assume there is a main author or contributor of the project, who is capable of using version control tools like GIT. The main author writes the initial version of the Rmd document, and upload it to Google Drive via the `upload_rmd()` function.
 
-1. The Rmd document in Google Drive is shared with other collaborators, who can make or suggest changes in Google Document.
+2.  The Rmd document in Google Drive is shared with other collaborators, who can make or suggest changes in Google Document.
 
-1. The main author can accept suggested changes, and download/preview the Rmd document locally via `render_rmd()`. Other collaborators can also do this by themselves if they have modified code chunks and want to see the new results.
+3.  The main author can accept suggested changes, and download/preview the Rmd document locally via `render_rmd()`. Other collaborators can also do this by themselves if they have modified code chunks and want to see the new results.
 
-1. If satisfied, the main author can commit changes to the GIT repository.
+4.  If satisfied, the main author can commit changes to the GIT repository.
 
 The collaborative editing can be either synchronous or asynchronous in Google Drive. Multiple people can edit the same document at the same time, or wait for other people to finish their editing first.
 
@@ -238,15 +238,15 @@ There is also a function `udpate_rmd()` in the package, which allows you to edit
 
 ## Organize an R Markdown project into a research website with **workflowr** {#workflowr}
 
-The **workflowr** package (https://github.com/jdblischak/workflowr) can help you organize a (data analysis) project with a project template and the version control tool GIT. Every time you make a change to the project, you can log the change, and **workflowr** can build a website corresponding to that particular version of your project. This means that you will be able to view the full history of your analysis results. Although this package uses GIT as the backend for version control, you do not really have to be familiar with GIT, because it has provided R functions that do the GIT operations under the hood, and you only need to call these R functions. Please see the package documentation for how to get started and more information.
+The **workflowr** package (<https://github.com/jdblischak/workflowr>) can help you organize a (data analysis) project with a project template and the version control tool GIT. Every time you make a change to the project, you can log the change, and **workflowr** can build a website corresponding to that particular version of your project. This means that you will be able to view the full history of your analysis results. Although this package uses GIT as the backend for version control, you do not really have to be familiar with GIT, because it has provided R functions that do the GIT operations under the hood, and you only need to call these R functions. Please see the package documentation for how to get started and more information.
 
-The main author of **workflowr**, John Blischak, has also put together a non-exhaustive list of R packages and guides related to the workflow of R projects, which can be found in this GitHub repo: https://github.com/jdblischak/r-project-workflows.
+The main author of **workflowr**, John Blischak, has also put together a non-exhaustive list of R packages and guides related to the workflow of R projects, which can be found in this GitHub repo: <https://github.com/jdblischak/r-project-workflows>.
 
 ## Send Emails based on R Markdown {#blastula-email}
 
-With the **blastula** package (https://github.com/rich-iannone/blastula), you can render an Rmd document to the Email body and send the Email. To render an Rmd document to an Email, the document needs to use the output format `blastula::blastula_email`, e.g.,
+With the **blastula** package (<https://github.com/rich-iannone/blastula>), you can render an Rmd document to the Email body and send the Email. To render an Rmd document to an Email, the document needs to use the output format `blastula::blastula_email`, e.g.,
 
-````md
+```` {.md}
 ---
 title: Weekly Report
 output: blastula::blastula_email
@@ -269,4 +269,4 @@ John
 
 This Rmd document should be rendered via the function `blastula::render_email()`, and the output can be passed to `blastula::smtp_send()`, which will send out the Email. Note that `smtp_send()` needs an Email server as well as your credentials.
 
-If you use RStudio Connect, you can find more examples at https://solutions.rstudio.com/examples/blastula-overview/, including automated, conditional, and parameterized emails.
+If you use RStudio Connect, you can find more examples at <https://solutions.rstudio.com/examples/blastula-overview/>, including automated, conditional, and parameterized emails.

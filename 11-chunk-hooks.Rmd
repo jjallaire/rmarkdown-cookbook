@@ -18,9 +18,9 @@ knitr::knit_hooks$set(greet = function(before) {
 })
 ```
 
-We will explain the arguments of the hook function in a moment. Now we set the chunk option `greet = TRUE` for the chunk below: 
+We will explain the arguments of the hook function in a moment. Now we set the chunk option `greet = TRUE` for the chunk below:
 
-````md
+```` {.md}
 ```{r, greet=TRUE}`r ''`
 1 + 1
 ```
@@ -36,7 +36,7 @@ And you will see that "Hello!" appears before the chunk, and "Bye!" appears afte
 
 A chunk hook function can possibly take four arguments: `before`, `options`, `envir`, and `name`. In other words, it can be of this form:
 
-```r
+``` {.r}
 function(before, options, envir, name) {
 
 }
@@ -44,13 +44,13 @@ function(before, options, envir, name) {
 
 All four arguments are optional. You can have four, three, two, one, or even no arguments. In the above example, we used one argument (i.e., `before`). The meanings of these arguments are:
 
-- `before`: Whether the chunk hook is executed before or after the code chunk itself is executed. Note that a chunk hook is executed twice for every code chunk (once before with `hook(before = TRUE)` and once after with `hook(before = FALSE`).
+-   `before`: Whether the chunk hook is executed before or after the code chunk itself is executed. Note that a chunk hook is executed twice for every code chunk (once before with `hook(before = TRUE)` and once after with `hook(before = FALSE`).
 
-- `options`: The list of chunk options for the current code chunk, e.g., `list(fig.width = 5, echo = FALSE, ...)`.
+-   `options`: The list of chunk options for the current code chunk, e.g., `list(fig.width = 5, echo = FALSE, ...)`.
 
-- `envir`: The environment in which the chunk hook is evaluated.
+-   `envir`: The environment in which the chunk hook is evaluated.
 
-- `name`: The name of the chunk option that triggered the chunk hook.
+-   `name`: The name of the chunk option that triggered the chunk hook.
 
 As we mentioned in the beginning of this chapter, non-character values returned by chunk hooks are silently ignored, and character values are written to the output document.
 
@@ -85,7 +85,7 @@ plot(cars)
 
 ## Optimize PNG plots {#optipng}
 
-If you have installed the program OptiPNG (http://optipng.sourceforge.net), you may use the hook `knitr::hook_optipng()` to optimize PNG plot files to a smaller size without losing the image quality.
+If you have installed the program OptiPNG (<http://optipng.sourceforge.net>), you may use the hook `knitr::hook_optipng()` to optimize PNG plot files to a smaller size without losing the image quality.
 
 ```{r, eval=FALSE}
 knitr::knit_hooks$set(optipng = knitr::hook_optipng)
@@ -93,7 +93,7 @@ knitr::knit_hooks$set(optipng = knitr::hook_optipng)
 
 After you set up this hook, you can use the chunk option `optipng` to pass command-line arguments to OptiPNG, e.g., `optipng = '-o7'`. These command-line arguments are optional, which means you can just use `optipng = ''` to enable the hook for a code chunk. Please see the user manual on the website of OptiPNG to know the possible arguments.
 
-Note that macOS users can easily install OptiPNG with Homebrew (https://brew.sh): `brew install optipng`.
+Note that macOS users can easily install OptiPNG with Homebrew (<https://brew.sh>): `brew install optipng`.
 
 ## Report how much time each chunk takes to run {#time-chunk}
 
@@ -118,11 +118,9 @@ knitr::knit_hooks$set(time_it = local({
 
 Then you can time a chunk with the chunk option `time_it`, e.g.,
 
-````
-```{r, time_it = TRUE}`r ''`
-Sys.sleep(2)
-```
-````
+    ```{r, time_it = TRUE}`r ''`
+    Sys.sleep(2)
+    ```
 
 If you want to time all code chunks, you can certainly set the option globally: `knitr::opts_chunk$set(time_it = TRUE)`.
 
@@ -159,4 +157,4 @@ The original chunk options are actually stored as a character string in the chun
 
 `r import_example('chunk-wrapper.Rmd')`
 
-Basically, we restored the chunk header from `options$params.src` by putting this string inside ```` ```{r, }````. Then we wrapped this line in a pair of four backticks, so it can be displayed verbatim in the output. Note that the original code chunk might be indented (e.g., when it is nested in a list item), so we also need to add the proper indentation, which is stored in the chunk option `options$indent`.
+Basically, we restored the chunk header from `options$params.src` by putting this string inside ```` ```{r, } ````. Then we wrapped this line in a pair of four backticks, so it can be displayed verbatim in the output. Note that the original code chunk might be indented (e.g., when it is nested in a list item), so we also need to add the proper indentation, which is stored in the chunk option `options$indent`.

@@ -8,28 +8,29 @@ The greatest strength of the Markdown language is that its simplicity makes it v
 
 However, this comes at a cost of customization. Many features of typical word processors are not directly available in Markdown, e.g.,
 
-- Changing the font size of a piece of text;
+-   Changing the font size of a piece of text;
 
-- Changing the font color of certain words;
+-   Changing the font color of certain words;
 
-- Specifying text alignment.
+-   Specifying text alignment.
 
-We leave it to you to decide whether such features are worth your effort. To some degree, Markdown reflects the philosophy of Stoicism: the "natural world" consists of plain text, and you should not be _controlled_ by the desire for (visual) pleasure. Anyway, this chapter offers some tips on how you can customize the appearance and styling of elements in an R Markdown document.
+We leave it to you to decide whether such features are worth your effort. To some degree, Markdown reflects the philosophy of Stoicism: the "natural world" consists of plain text, and you should not be *controlled* by the desire for (visual) pleasure. Anyway, this chapter offers some tips on how you can customize the appearance and styling of elements in an R Markdown document.
 
-If you need a reminder in the basics of the Markdown language, the R Markdown cheatsheet at https://www.rstudio.com/resources/cheatsheets/ provides a good overview of the basic syntax.
+If you need a reminder in the basics of the Markdown language, the R Markdown cheatsheet at <https://www.rstudio.com/resources/cheatsheets/> provides a good overview of the basic syntax.
 
 ## Font color {#font-color}
+
 <!-- https://stackoverflow.com/questions/29067541/rmarkdown-how-to-change-the-font-color -->
 
 The Markdown syntax has no built-in method for changing text colors. We can use HTML and LaTeX syntax to change the formatting of words:
 
-- For HTML, we can wrap the text in the `<span>` tag and set color with CSS, e.g., `<span style="color: red;">text</span>`.
+-   For HTML, we can wrap the text in the `<span>` tag and set color with CSS, e.g., `<span style="color: red;">text</span>`.
 
-- For PDF, we can use the LaTeX command `\textcolor{}{}`. This requires the extra LaTeX package **xcolor**, which is included in Pandoc's default LaTeX template.
+-   For PDF, we can use the LaTeX command `\textcolor{}{}`. This requires the extra LaTeX package **xcolor**, which is included in Pandoc's default LaTeX template.
 
 As an example of changing the color in PDF text:
 
-```text
+``` {.text}
 ---
 output: pdf_document
 ---
@@ -61,18 +62,23 @@ This method may be a little advanced for R users because it involves another pro
 
 `r import_example('font-color.Rmd')`
 
-In this example, we implicitly used a Pandoc Markdown extension named `bracketed_spans`, which allows us to write text with attributes, e.g., `[text]{.class attribute="value"}`. The Lua filter defined in the `cat` code chunk^[If you are not familiar with `cat` code chunks, please see Section \@ref(eng-cat).] puts text in `<span style="color: ..."></span>` if the output format is HTML, and in `\textcolor{...}{}` if the output format is LaTeX. The Lua filter is written to a file `color-text.lua`, and enabled through the command-line option `--lua-filter` passed to Pandoc via the `pandoc_args` option of the output formats.
+In this example, we implicitly used a Pandoc Markdown extension named `bracketed_spans`, which allows us to write text with attributes, e.g., `[text]{.class attribute="value"}`. The Lua filter defined in the `cat` code chunk[^1] puts text in `<span style="color: ..."></span>` if the output format is HTML, and in `\textcolor{...}{}` if the output format is LaTeX. The Lua filter is written to a file `color-text.lua`, and enabled through the command-line option `--lua-filter` passed to Pandoc via the `pandoc_args` option of the output formats.
+
+[^1]: If you are not familiar with `cat` code chunks, please see Section \@ref(eng-cat).
 
 Compared to the previous method, the advantage of using the Lua filter is that you can still use Markdown syntax inside the brackets, whereas using the R function `colorize()` in the previous section does not allow Markdown syntax.
 
 ## Indent text
 
 <!-- PROBLEM: https://stackoverflow.com/questions/47087557/indent-without-adding-a-bullet-point-or-number-in-rmarkdown/52570150#52570150 -->
+
 <!-- SOLUTION: https://rmarkdown.rstudio.com/authoring_pandoc_markdown.html%23raw-tex#line_blocks -->
 
-As mentioned in Section \@ref(linebreaks), whitespaces are often meaningless in Markdown. Markdown will also ignore spaces used for indentation by default. However, we may want to keep the indentation in certain cases, e.g., in verses and addresses. In these situations, we can use line blocks by starting the line with a vertical bar (`|`). The linebreaks and any leading spaces will be preserved in the output. For example:^[This is a limerick written by Claus Ekstrøm: https://yihui.org/en/2018/06/xaringan-math-limerick/.]
+As mentioned in Section \@ref(linebreaks), whitespaces are often meaningless in Markdown. Markdown will also ignore spaces used for indentation by default. However, we may want to keep the indentation in certain cases, e.g., in verses and addresses. In these situations, we can use line blocks by starting the line with a vertical bar (`|`). The linebreaks and any leading spaces will be preserved in the output. For example:[^2]
 
-```md
+[^2]: This is a limerick written by Claus Ekstrøm: <https://yihui.org/en/2018/06/xaringan-math-limerick/>.
+
+``` {.md}
 | When dollars appear it's a sign
 |   that your code does not quite align  
 | Ensure that your math  
@@ -83,15 +89,14 @@ As mentioned in Section \@ref(linebreaks), whitespaces are often meaningless in 
 The output is:
 
 > | When dollars appear it's a sign
-|   that your code does not quite align  
-| Ensure that your math  
-|   in xaringan hath  
-|   been placed on a single long line
-
+> |   that your code does not quite align
+> | Ensure that your math
+> |   in xaringan hath
+> |   been placed on a single long line
 
 The lines can be hard-wrapped in the Markdown source. If the continuation line begins with a space, the previous linebreak and the leading spaces on this line will be ignored as usual. For example:
 
-```md
+``` {.md}
 | Hiring Manager
 | School of Ninja,
   Hacker's University
@@ -102,10 +107,8 @@ The lines can be hard-wrapped in the Markdown source. If the continuation line b
 The output is:
 
 > | Hiring Manager
-> | School of Ninja,
->  Hacker's University
-> | 404 Not Found Road,
->  Undefined 0x1234, NA
+> | School of Ninja, Hacker's University
+> | 404 Not Found Road, Undefined 0x1234, NA
 
 You can see that the linebreak after "School of Ninja" was ignored.
 
@@ -115,7 +118,7 @@ Sometimes the text output printed from R code may be too wide. If the output doc
 
 The R global option `width` can be used to control the width of printed text output from some R functions, and you may try a smaller value if the default is too large. This option typically indicates a rough number of characters per line (except East Asian languages). For example:
 
-````md
+```` {.md}
 The output is too wide in this chunk:
 
 ```{r}`r ''`
@@ -133,7 +136,7 @@ matrix(runif(100), ncol = 20)
 
 Not all R functions respect the `width` option. If this option does not work, your only choice may be to wrap the long lines of text. This is actually the default behavior of the `html_document` output format. If the HTML output format that you are using does not wrap the long lines, you may apply the CSS code below (see Section \@ref(html-css) for how):
 
-```css
+``` {.css}
 pre code {
   white-space: pre-wrap;
 }
@@ -141,7 +144,7 @@ pre code {
 
 For PDF output, it is trickier to wrap the lines. One solution is to use the LaTeX package **listings**, which can be enabled via the Pandoc argument `--listings`. Then you have to set an option for this package, and the setup code can be included from an external LaTeX file (see Section \@ref(latex-preamble) for how), e.g.,
 
-```yaml
+``` {.yaml}
 ---
 output:
   pdf_document:
@@ -153,13 +156,13 @@ output:
 
 In `preamble.tex`, we set an option of the **listings** package:
 
-```latex
+``` {.latex}
 \lstset{
   breaklines=true
 }
 ```
 
-If you do not like the appearance of code blocks with **listings**, you can set up other **listings** options in `\lstset{}`, e.g., you may change the font family with `basicstyle=\ttfamily`. You can find more information about this package in its documentation: https://ctan.org/pkg/listings.
+If you do not like the appearance of code blocks with **listings**, you can set up other **listings** options in `\lstset{}`, e.g., you may change the font family with `basicstyle=\ttfamily`. You can find more information about this package in its documentation: <https://ctan.org/pkg/listings>.
 
 ## Control the size of plots/images {#figure-size}
 
@@ -167,23 +170,23 @@ For plots drawn by R code, their size can be controlled by the chunk option `fig
 
 If a plot or an image is not generated from an R code chunk, you can include it in two ways:
 
-- Use the Markdown syntax `![caption](path/to/image)`. In this case, you can set the size of the image using the `width` and/or `height` attributes, e.g.,
+-   Use the Markdown syntax `![caption](path/to/image)`. In this case, you can set the size of the image using the `width` and/or `height` attributes, e.g.,
 
-  ```md
-  We include an image in the next paragraph:
-  
-  ![A nice image.](foo/bar.png){width=50%}
-  ```
+    ``` {.md}
+    We include an image in the next paragraph:
 
-- Use the **knitr** function `knitr::include_graphics()` in a code chunk. You can use chunk options such as `out.width` and `out.height` for this chunk, e.g.,
+    ![A nice image.](foo/bar.png){width=50%}
+    ```
 
-  ````md
-  We include an external image with the R function:
-  
-  ```{r, echo=FALSE, out.width="50%", fig.cap="A nice image."}`r ''`
-  knitr::include_graphics("foo/bar.png")
-  ```
-  ````
+-   Use the **knitr** function `knitr::include_graphics()` in a code chunk. You can use chunk options such as `out.width` and `out.height` for this chunk, e.g.,
+
+    ```` {.md}
+    We include an external image with the R function:
+
+    ```{r, echo=FALSE, out.width="50%", fig.cap="A nice image."}`r ''`
+    knitr::include_graphics("foo/bar.png")
+    ```
+    ````
 
 We used the width `50%` in the above examples, which means half of the width of the image container (if the image is directly contained by a page instead of a child element of the page, that means half of the page width). If you know that you only want to generate the image for a specific output format, you can use a specific unit. For example, you may use `300px` if the output format is HTML.
 
@@ -195,7 +198,7 @@ The chunk option `fig.align` specifies the alignment of figures. For example, yo
 
 You can add line numbers to either source code blocks via the chunk option `attr.source = ".numberLines"` or text output blocks via `attr.output = ".numberLines"`, e.g.,
 
-````md
+```` {.md}
 ```{r, attr.source='.numberLines'}`r ''`
 if (TRUE) {
   x <- 1:10
@@ -215,7 +218,7 @@ if (TRUE) {
 
 Note that for HTML output, you have to choose a syntax highlighting theme provided by Pandoc, which means the `highlight` option of the output format should not be `default` or `textmate`. You can use other values for this option listed on the help page `?rmarkdown::html_document`, e.g.,
 
-```yaml
+``` {.yaml}
 output:
   html_document:
     highlight: tango
@@ -223,7 +226,7 @@ output:
 
 For **bookdown**'s `gitbook` output format, you may need to adjust the CSS a little bit for the line numbers to be displayed properly on the left side of the code. Below is what we used for this book (if you find the line numbers too close to the left margin, increase the `left` value to, say, `-0.2em`):
 
-```css
+``` {.css}
 pre.numberSource code > span > a:first-child::before {
   left: -0.3em;
 }
@@ -231,7 +234,7 @@ pre.numberSource code > span > a:first-child::before {
 
 For **revealjs**'s `revealjs_presentation` output format, you may also need to adjust the CSS.
 
-```css
+``` {.css}
 .reveal pre code {
   overflow: visible;
 }
@@ -241,7 +244,7 @@ See Section \@ref(html-css) if you do not know how to apply custom CSS styles to
 
 You can also specify the starting number via the `startFrom` attribute, e.g.,
 
-````md
+```` {.md}
 ```{r, attr.source='.numberLines startFrom="5"'}`r ''`
 if (TRUE) {
   1:10
@@ -251,23 +254,21 @@ if (TRUE) {
 
 ## Verbatim code chunks
 
-Typically we write code chunks and inline expressions that we want to be parsed and evaluated by **knitr**. However, if you are trying to write a tutorial on using **knitr**, you may need to generate verbatim code chunk or inline expression that is _not_ parsed by **knitr**, and we want to display the content of the chunk header. 
+Typically we write code chunks and inline expressions that we want to be parsed and evaluated by **knitr**. However, if you are trying to write a tutorial on using **knitr**, you may need to generate verbatim code chunk or inline expression that is *not* parsed by **knitr**, and we want to display the content of the chunk header.
 
-Unfortunately, we can't wrap the code chunk in another layer of backticks, but instead we must make the code chunk invalid within the source code by inserting  "`` `r ''` `` to the chunk header. This will be evaluated as an inline expression to _an empty string_ by **knitr**. For this example, the following "code chunk" in the source document:
+Unfortunately, we can't wrap the code chunk in another layer of backticks, but instead we must make the code chunk invalid within the source code by inserting "`` `r ''` `` to the chunk header. This will be evaluated as an inline expression to *an empty string* by **knitr**. For this example, the following"code chunk\" in the source document:
 
-````{r echo = FALSE, comment = NA}
+```{r echo = FALSE, comment = NA}
 cat("`r ''````{r, eval=TRUE}
 1 + 1
 ```")
-````
+```
 
 will be rendered as:
 
-````
-```{r, eval=TRUE}`r ''`
-1 + 1
-```
-````
+    ```{r, eval=TRUE}`r ''`
+    1 + 1
+    ```
 
 in the output. The inline expression is gone because it is substituted by an empty string. However, that is only the first step. To show something verbatim in the output, the syntax in Markdown is to wrap it in a code block (indent by four spaces or use backtick fences). This will be the actual source if you want to see the output above:
 
@@ -284,30 +285,29 @@ Why four backticks? That is because you have to use at least N+1 backticks to wr
 
 There are multiple ways to show a verbatim inline expression. I mentioned this trick for R Markdown documents in the FAQ:
 
-```md
+``` {.md}
 This will show a verbatim inline R expression `` `r
 1+1` `` in the output.
 ```
 
 The trick works due to two reasons (1) a single line break is often the same as a space to Markdown parsers (by comparison, two consecutive line breaks means starting a new paragraph); (2) **knitr** requires a space after `` `r `` to parse it; if the space is missing, it will not be treated as an inline expression. In the output document, you should see:
 
-> This will show a verbatim inline R expression `` `r
-1+1` `` in the output.
+> This will show a verbatim inline R expression `` `r 1+1` `` in the output.
 
 Another way to show a verbatim inline R expression is to wrap the R code in `knitr::inline_expr()`, e.g.,
 
-```md
+``` {.md}
 This will show a verbatim inline R expression
 `` `r knitr::inline_expr('knitr::inline_expr("1+1")')` `` in the output.
 ```
 
 ## Multi-column layout
 
-Pandoc's Markdown supports the multi-column layout for slides but not other types of documents. In this recipe, we show how to use the multi-column layout in normal HTML documents and LaTeX documents. This recipe was inspired by Atsushi Yasumoto's solutions to the **knitr** issue https://github.com/yihui/knitr/issues/1743.
+Pandoc's Markdown supports the multi-column layout for slides but not other types of documents. In this recipe, we show how to use the multi-column layout in normal HTML documents and LaTeX documents. This recipe was inspired by Atsushi Yasumoto's solutions to the **knitr** issue <https://github.com/yihui/knitr/issues/1743>.
 
 The recipe will be much simpler if you only need to consider HTML output, because arranging HTML elements side by side is relatively simple via CSS. It will be even simpler if you only need to arrange the text output of a code chunk side by side. Below is the first example:
 
-````md
+```` {.md}
 ---
 output: html_document
 ---
@@ -324,7 +324,7 @@ If you want to arrange arbitrary content side by side in HTML output, you can us
 
 `r import_example('multicol-html.Rmd')`
 
-In the above example, the outside `Div` (`::::`) contains two `Div`s (`:::`). You can certainly add more `Div`s inside. To learn more about the very powerful CSS attribute `display: flex;` (CSS Flexbox), you may read the guide at https://css-tricks.com/snippets/css/a-guide-to-flexbox/. The CSS Grid (`display: grid;`) is also very powerful and can be used in the above example, too. If you want to try it, you may change `display: flex;` to `display: grid; grid-template-columns: 1fr 1fr; grid-column-gap: 10px;`. See the guide at https://css-tricks.com/snippets/css/complete-guide-grid/ if you want to learn more about the grid layout.
+In the above example, the outside `Div` (`::::`) contains two `Div`s (`:::`). You can certainly add more `Div`s inside. To learn more about the very powerful CSS attribute `display: flex;` (CSS Flexbox), you may read the guide at <https://css-tricks.com/snippets/css/a-guide-to-flexbox/>. The CSS Grid (`display: grid;`) is also very powerful and can be used in the above example, too. If you want to try it, you may change `display: flex;` to `display: grid; grid-template-columns: 1fr 1fr; grid-column-gap: 10px;`. See the guide at <https://css-tricks.com/snippets/css/complete-guide-grid/> if you want to learn more about the grid layout.
 
 It is trickier if you want the layout to work for both HTML and LaTeX output. We show a full example below that works for HTML document, LaTeX document, and Beamer presentation output:
 
@@ -344,4 +344,4 @@ For LaTeX output (`pdf_document`), we have to introduce some dirty hacks stored 
 
 `r import_example('columns.tex')`
 
-The `column` environment is particularly complicated mainly because Pandoc starts a new paragraph for each `Div` in LaTeX output, and we have to remove these new paragraphs, otherwise the `Div`s cannot be placed side by side. The hacks were borrowed from https://tex.stackexchange.com/q/179016/9128.
+The `column` environment is particularly complicated mainly because Pandoc starts a new paragraph for each `Div` in LaTeX output, and we have to remove these new paragraphs, otherwise the `Div`s cannot be placed side by side. The hacks were borrowed from <https://tex.stackexchange.com/q/179016/9128>.

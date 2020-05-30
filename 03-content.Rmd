@@ -6,7 +6,7 @@ In this chapter, we introduce some tips and tricks that can be used to customize
 
 When you want to break a page, you can insert the command `\newpage` or `\pagebreak` in the document. These are LaTeX commands, but the **rmarkdown** package is able to recognize them for both LaTeX output formats and a few non-LaTeX output formats including HTML, Word, and ODT. For example:
 
-```md
+``` {.md}
 ---
 title: Breaking pages
 output:
@@ -25,7 +25,7 @@ output:
 
 This feature is based on Pandoc's Lua filters (see Section \@ref(lua-filters)). For those who are interested in the technology, you may view this package vignette:
 
-```r
+``` {.r}
 vignette("lua-filters", package = "rmarkdown")
 ```
 
@@ -33,7 +33,7 @@ vignette("lua-filters", package = "rmarkdown")
 
 You can use inline R code (see Section \@ref(r-code)) anywhere in an Rmd document, including the YAML metadata section. This means some YAML metadata can be dynamically generated with inline R code, such as the document title. For example:
 
-```yaml
+``` {.yaml}
 ---
 title: "An analysis of `r knitr::inline_expr('nrow(mtcars)')` cars"
 ---
@@ -41,7 +41,7 @@ title: "An analysis of `r knitr::inline_expr('nrow(mtcars)')` cars"
 
 If your title depends on an R variable created later in the document, you may add the `title` field in a later YAML section, e.g.,
 
-````md
+```` {.md}
 ---
 author: "Smart Analyst"
 output: pdf_document
@@ -64,7 +64,7 @@ In the example above, we added the document title after we have created the vari
 
 You can also generate titles or any YAML fields dynamically from parameters in parameterized reports (see Section \@ref(parameterized-reports)), e.g.,
 
-```yaml
+``` {.yaml}
 ---
 title: "`r knitr::inline_expr('params$doc_title')`"
 author: "Smart Analyst"
@@ -85,7 +85,7 @@ When a Rmd document is compiled, all of its metadata in the YAML section will be
 
 Most output formats support an option `number_sections`, which can be used to enable numbering sections if set to `true`, e.g.,
 
-```yaml
+``` {.yaml}
 output:
   html_document:
     number_sections: true
@@ -95,19 +95,19 @@ output:
 
 If you want a certain section to be unnumbered when the option `number_sections` is `true`, you may add `{-}` after the section heading, e.g.,
 
-```md
+``` {.md}
 # This section is unnumbered {-}
 ```
 
-Equivalently, you may also use `{.unnumbered}`. You can also add other attributes to the heading, e.g., `{.unnumbered #section-id}`. Please see https://pandoc.org/MANUAL.html#extension-header_attributes for more information.
+Equivalently, you may also use `{.unnumbered}`. You can also add other attributes to the heading, e.g., `{.unnumbered #section-id}`. Please see <https://pandoc.org/MANUAL.html#extension-header_attributes> for more information.
 
 ## Bibliographies and citations {#bibliography}
 
 <!-- https://stackoverflow.com/questions/32946203/including-bibliography-in-rmarkdown-document-with-use-of-the-knitcitations -->
 
-For an overview of including bibliographies in your output document, you may see [Section 2.8](https://bookdown.org/yihui/bookdown/citations.html) of @bookdown2016. The basic usage requires us to specify a bibliography file using the `bibliography` metadata field in YAML. For example:
+For an overview of including bibliographies in your output document, you may see [Section 2.8](https://bookdown.org/yihui/bookdown/citations.html) of [@bookdown2016]. The basic usage requires us to specify a bibliography file using the `bibliography` metadata field in YAML. For example:
 
-```yaml
+``` {.yaml}
 ---
 output: html_document
 bibliography: references.bib  
@@ -116,7 +116,7 @@ bibliography: references.bib
 
 where the BibTeX database is a plain-text file with the `*.bib` extension that consists of bibliography entries like this:
 
-```bibtex
+``` {.bibtex}
 @Manual{R-base,
   title = {R: A Language and Environment for Statistical
            Computing},
@@ -134,7 +134,7 @@ Items can be cited directly within the documentation using the syntax `@key` whe
 
 By default, Pandoc will use a Chicago author-date format for citations and references. To use another style, you will need to specify a CSL (Citation Style Language) style file in the `csl` metadata field, e.g.,
 
-```yaml
+``` {.yaml}
 ---
 output: html_document
 bibliography: references.bib
@@ -144,25 +144,24 @@ csl: biomed-central.csl
 
 To find your required formats, we recommend using [the Zotero website](https://www.zotero.org/styles), which makes it easy to search for and download your desired style.
 
-CSL files can be tweaked to meet custom formatting requirements. For example, we can change the number of authors required before "et. al" is used to abbreviate them. This can be simplified through the use of visual editors such as the one available at http://editor.citationstyles.org.
+CSL files can be tweaked to meet custom formatting requirements. For example, we can change the number of authors required before "et. al" is used to abbreviate them. This can be simplified through the use of visual editors such as the one available at <http://editor.citationstyles.org>.
 
-### Add an item to bibliography without using it 
+### Add an item to bibliography without using it
 
 By default, the bibliography will only display items that are directly referenced in the document. If you want to include items in the bibliography without actually citing them in the body text, you can define a dummy `nocite` metadata field and put the citations there.
 
-```yaml
+``` {.yaml}
 ---
 nocite: |
   @item1, @item2
 ---
 ```
 
-
 ### Add all items to bibliography
 
 If we do not wish to explicitly state all of the items within the bibliography but would still like to show them in our references, we can use the following syntax:
 
-```yaml
+``` {.yaml}
 ---
 nocite: '@*'
 ---
@@ -173,11 +172,12 @@ This will force all items to be displayed in the bibliography.
 ### Include appendix after bibliography
 
 <!-- https://stackoverflow.com/questions/41532707/include-rmd-appendix-after-references/42258998#42258998 -->
+
 <!-- https://stackoverflow.com/questions/16427637/pandoc-insert-appendix-after-bibliography -->
 
 By default, the bibliography appears at the very end of the document. However, there can be cases in which we want to place additional text after the references, most typically if we wish to include appendices in the document. We can force the position of the references by using `<div id="refs"></div>`, as shown below:
 
-```md
+``` {.md}
 # References
 
 <div id="refs"></div>
@@ -187,7 +187,7 @@ By default, the bibliography appears at the very end of the document. However, t
 
 We can improve this further by using the **bookdown** package, which offers a [special header](https://bookdown.org/yihui/bookdown/markdown-extensions-by-bookdown.html#special-headers) for the appendix as shown with the syntax below:
 
-```md
+``` {.md}
 # References
 
 <div id="refs"></div>
@@ -229,7 +229,7 @@ Without the file path argument, `knitr::write_bib()` writes the citation entries
 
 Note that `write_bib()` is designed to overwrite the existing bibliography file. If you want to manually add any other entries to the bibliography, it is recommended that you create a second `.bib` file and refer to it in the YAML field `bibliography`, e.g.,
 
-````md
+```` {.md}
 ---
 bibliography: [packages.bib. references.bib]
 ---
@@ -241,7 +241,7 @@ knitr::write_bib(file = 'packages.bib')
 
 In the above example, `packages.bib` is automatically generated, and you should not manually change it. All other citation entries can be manually written to `references.bib`.
 
-We only introduced one way to generate R package citations above. To dynamically generate citations for other types of literature, you may check out the **knitcitations** package at https://github.com/cboettig/knitcitations.
+We only introduced one way to generate R package citations above. To dynamically generate citations for other types of literature, you may check out the **knitcitations** package at <https://github.com/cboettig/knitcitations>.
 
 ## Cross-referencing within documents {#cross-ref}
 
@@ -251,17 +251,17 @@ Cross-referencing is a useful way of directing your readers through your documen
 
 To use cross-references, you have to:
 
-- **Use a bookdown output format**: cross-referencing is not provided directly within the base **rmarkdown** package, but is provided as an extension in **bookdown**. We must therefore use an output format from **bookdown** (e.g., `html_document2`, `pdf_document2`, and `word_document2`, etc.) in the YAML `output` field.
+-   **Use a bookdown output format**: cross-referencing is not provided directly within the base **rmarkdown** package, but is provided as an extension in **bookdown**. We must therefore use an output format from **bookdown** (e.g., `html_document2`, `pdf_document2`, and `word_document2`, etc.) in the YAML `output` field.
 
-- **A caption to your figure (or table)**: figures without a caption will be included directly as images and will therefore not be a numbered figure.
+-   **A caption to your figure (or table)**: figures without a caption will be included directly as images and will therefore not be a numbered figure.
 
-- **A labeled code chunk**: this provides the identifier for referencing the figure generated by the chunk.
+-   **A labeled code chunk**: this provides the identifier for referencing the figure generated by the chunk.
 
 After these conditions are met, we can make cross-references within the text using the syntax `\@ref(type:label)`, where `label` is the chunk label and `type` is the environment being referenced (e.g. `tab`, `fig`, or `eqn`). An example is provided below:
 
 `r import_example('cross-ref.Rmd')`
 
-The output of this document is shown in Figure \@ref(fig:bookdown-ref). 
+The output of this document is shown in Figure \@ref(fig:bookdown-ref).
 
 ```{r bookdown-ref, fig.cap="Example of cross-referencing within an R Markdown document.", fig.align='center', echo=FALSE}
 knitr::include_graphics("images/bookdown-ref.png", dpi = NA)
@@ -275,43 +275,43 @@ You can also cross-reference equations, theorems, and section headers. These typ
 
 If you want the date on which the Rmd document is compiled to be reflected in the output report, you can add an inline R expression to the `date` field in YAML, and use the `Sys.Date()` or `Sys.time()` function to obtain the current date, e.g.,
 
-```yaml
+``` {.yaml}
 date: "`r knitr::inline_expr('Sys.Date()')`"
 ```
 
 You may want to specify the desired date or date-time format to make it more human-readable, e.g.,
 
-```yaml
+``` {.yaml}
 date: "`r knitr::inline_expr("format(Sys.time(), '%d %B, %Y')")`"
 ```
 
 This will generate the date dynamically each time you knit your document, e.g., `r format(Sys.time(), '%d %B, %Y')`. If you wish to customize the format of the dates, you can alter the time format by providing your own format string. Here are some examples:
 
-- `%B %Y`: `r format(Sys.time(), '%B %Y')`
-- `%d/%m/%y`: `r format(Sys.time(), '%d/%m/%y')`
-- `%a/%d/%b`: `r format(Sys.time(), '%a %d %b')`
+-   `%B %Y`: `r format(Sys.time(), '%B %Y')`
+-   `%d/%m/%y`: `r format(Sys.time(), '%d/%m/%y')`
+-   `%a/%d/%b`: `r format(Sys.time(), '%a %d %b')`
 
 A full table of POSIXct formats is shown in Table \@ref(tab:date-format).
 
-Table: (\#tab:date-format) Date and time formats in R.
+| Code | Meaning                       | Code | Meaning                                       |
+|:-----|:------------------------------|:-----|:----------------------------------------------|
+| %a   | Abbreviated weekday           | %A   | Full weekday                                  |
+| %b   | Abbreviated month             | %B   | Full month                                    |
+| %c   | Locale-specific date and time | %d   | Decimal date                                  |
+| %H   | Decimal hours (24 hour)       | %I   | Decimal hours (12 hour)                       |
+| %j   | Decimal day of the year       | %m   | Decimal month                                 |
+| %M   | Decimal minute                | %p   | Locale-specific AM/PM                         |
+| %S   | Decimal second                | %U   | Decimal week of the year (starting on Sunday) |
+| %w   | Decimal Weekday (0=Sunday)    | %W   | Decimal week of the year (starting on Monday) |
+| %x   | Locale-specific Date          | %X   | Locale-specific Time                          |
+| %y   | 2-digit year                  | %Y   | 4-digit year                                  |
+| %z   | Offset from GMT               | %Z   | Time zone (character)                         |
 
-|Code |Meaning                       |Code |Meaning                                       |
-|:----|:-----------------------------|:----|:---------------------------------------------|
-|%a   |Abbreviated weekday           |%A   |Full weekday                                  |
-|%b   |Abbreviated month             |%B   |Full month                                    |
-|%c   |Locale-specific date and time |%d   |Decimal date                                  |
-|%H   |Decimal hours (24 hour)       |%I   |Decimal hours (12 hour)                       |
-|%j   |Decimal day of the year       |%m   |Decimal month                                 |
-|%M   |Decimal minute                |%p   |Locale-specific AM/PM                         |
-|%S   |Decimal second                |%U   |Decimal week of the year (starting on Sunday) |
-|%w   |Decimal Weekday (0=Sunday)    |%W   |Decimal week of the year (starting on Monday) |
-|%x   |Locale-specific Date          |%X   |Locale-specific Time                          |
-|%y   |2-digit year                  |%Y   |4-digit year                                  |
-|%z   |Offset from GMT               |%Z   |Time zone (character)                         |
+: (\#tab:date-format) Date and time formats in R.
 
 As a final note, you may also want to include some explanatory text along with the date. You can add any text such as "Last compiled on" before the R code as follows:
 
-```yaml
+``` {.yaml}
 date: "Last compiled on `r knitr::inline_expr("format(Sys.time(), '%d %B, %Y')")`"
 ```
 
@@ -321,7 +321,7 @@ date: "Last compiled on `r knitr::inline_expr("format(Sys.time(), '%d %B, %Y')")
 
 We can add multiple authors to an R Markdown document within the YAML frontmatter in a number of ways. If we simply want to list them on the same line, we can provide a single string to the document, e.g.,
 
-```yaml
+``` {.yaml}
 ---
 title: "Untitled"
 author: "John Doe, Jane Doe"
@@ -330,7 +330,7 @@ author: "John Doe, Jane Doe"
 
 Alternatively, if we wish for each entry to be on its own line, we can provide a list of entries to the YAML field. This can be useful if you wish to include further information about each author such as an Email address or institution, e.g.,
 
-```yaml
+``` {.yaml}
 ---
 author:
   - John Doe, Institution One
@@ -340,7 +340,7 @@ author:
 
 We can make use of the Markdown syntax `^[]` to add additional information as a footnote to the document. This may be more useful if you have extended information that you wish to include for each author, such as providing a contact Email and address. The exact behavior will depend on the output format:
 
-```yaml
+``` {.yaml}
 ---
 author:
   - John Doe^[Institution One, john@example.org]
@@ -356,7 +356,7 @@ install.packages('distill')
 
 You can use the Distill format with detailed author information, e.g.,
 
-```yaml
+``` {.yaml}
 ---
 title: "Distill for R Markdown"
 author:
@@ -374,13 +374,13 @@ output: distill::distill_article
 
 We can use **bookdown** output formats to add figure numbers to their captions. Below is an example:
 
-```yaml
+``` {.yaml}
 ---
 output: bookdown::html_document2
 ---
 ```
 
-````md
+```` {.md}
 ```{r cars, fig.cap = "An amazing plot"}`r ''`
 plot(cars)
 ```
@@ -394,7 +394,7 @@ Section \@ref(cross-ref) demonstrates how this works for other elements such as 
 
 You can add this feature to R Markdown output formats outside **bookdown**, too. The key is to use those formats as the "base formats" of **bookdown** output formats. For example, to number and cross-reference figures in the `rticles::jss_article` format, you can use:
 
-```yaml
+``` {.yaml}
 output:
   bookdown::pdf_book:
     base_format: rticles::jss_article
@@ -406,7 +406,7 @@ Please read the help pages of the **bookdown** output format functions to see if
 
 When you want to output a character vector for humans to read (e.g., `x <- c("apple", "banana", "cherry")`), you probably do not want something like `[1] "apple" "banana" "cherry"`, which is the normal way to print a vector in R. Instead, you may want a character string "`apple, banana, and cherry`". There is a base R function `paste()` that you can use to concatenate a character vector into a single string, e.g., `paste(x, collapse = ', ')`, and the output will be `"apple, banana, cherry"`. The problems are (1) the conjunction "and" is missing, and (2) when the vector only contains two elements, we should not use commas (e.g., the output should be `"apple and banana"` instead of `"apple, banana"`).
 
-The function `knitr::combine_words()` can be used to concatenate words into a phrase regardless of the length of the character vector. Basically, for a single word, it will just return this word; for two words A and B, it return `"A and B"`; for three or more words, it returns `"A, B, C, ..., Y, and Z"`. The function also has a few arguments that can customize the output. For example, if you want to output the words in pairs of backticks, you may use ``knitr::combine_words(x, before = '`')``.
+The function `knitr::combine_words()` can be used to concatenate words into a phrase regardless of the length of the character vector. Basically, for a single word, it will just return this word; for two words A and B, it return `"A and B"`; for three or more words, it returns `"A, B, C, ..., Y, and Z"`. The function also has a few arguments that can customize the output. For example, if you want to output the words in pairs of backticks, you may use `` knitr::combine_words(x, before = '`') ``.
 
 ```{r, collapse=TRUE}
 v = c("apple", "banana", "cherry")
@@ -421,7 +421,7 @@ knitr::combine_words(LETTERS[1:5])
 
 This function can be particularly handy when it is used in an inline R expression, e.g.,
 
-```markdown
+``` {.markdown}
 This morning we had `r knitr::inline_expr("knitr::combine_words(v)")` for breakfast.
 ```
 
@@ -437,7 +437,7 @@ blogdown:::quote_poem(c('This line', 'should be', 'broken.'))
 
 If you use the RStudio IDE, you can select the text in which you want to preserve the linebreaks, and apply the addin "Quote Poem". For example, the text below (in a fenced code block) does not contain trailing spaces:
 
-```md
+``` {.md}
 Like Barley Bending
 
 Like barley bending
@@ -460,22 +460,22 @@ Change my sorrow
 
 After we select the above poem and click the RStudio addin "Quote Poem", the output will be:
 
-> Like Barley Bending  
+> Like Barley Bending
 >
-> Like barley bending  
-　In low fields by the sea,  
-Singing in hard wind  
-　Ceaselessly;
+> Like barley bending\
+> 　In low fields by the sea,\
+> Singing in hard wind\
+> 　Ceaselessly;
 >
-> Like barley bending  
-　And rising again,  
-So would I, unbroken,  
-　Rise from pain;
+> Like barley bending\
+> 　And rising again,\
+> So would I, unbroken,\
+> 　Rise from pain;
 >
-> So would I softly,  
-　Day long, night long,  
-Change my sorrow  
-　Into song.
+> So would I softly,\
+> 　Day long, night long,\
+> Change my sorrow\
+> 　Into song.
 >
 > --- Sara Teasdale
 
@@ -487,7 +487,7 @@ Unless the target readers are highly interested in the computational details whi
 
 There is a simple method of extracting all code chunks in a document and put them together in a single code chunk using the chunk option `ref.label` and the function `knitr::all_labels()`, e.g.,
 
-````md
+```` {.md}
 # Appendix: All code for this report
 
 ```{r ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}`r ''`
@@ -500,7 +500,7 @@ The function `knitr::all_labels()` returns a vector of all chunk labels in the d
 
 Since `ref.label` can be a character vector of arbitrary chunk labels, you can certainly filter the labels to decide a subset of code chunks to display in the code appendix. Below is an example (credits to [Ariel Muldoon](https://yihui.org/en/2018/09/code-appendix/)) of excluding the labels `setup` and `get-labels`:
 
-````md
+```` {.md}
 ```{r get-labels, echo = FALSE}`r ''`
 labs = knitr::all_labels()
 labs = setdiff(labs, c("setup", "get-labels"))
@@ -514,7 +514,7 @@ You can also filter code chunks using the arguments of `knitr::all_labels()`. Fo
 
 ## Convert models to equations {#equatiomatic}
 
-The **equatiomatic** package (https://github.com/datalorax/equatiomatic) developed by Daniel Anderson et al. provides a convenient and automatic way to show the equations corresponding to models fitted in R. At the time of writing, this package is still very new on GitHub and its API may change significantly before its possible future CRAN release, so we only show a few brief examples below:
+The **equatiomatic** package (<https://github.com/datalorax/equatiomatic>) developed by Daniel Anderson et al. provides a convenient and automatic way to show the equations corresponding to models fitted in R. At the time of writing, this package is still very new on GitHub and its API may change significantly before its possible future CRAN release, so we only show a few brief examples below:
 
 ```{r, results='asis'}
 fit <- lm(mpg ~ cyl + disp, mtcars)
@@ -532,7 +532,7 @@ Please read the documentation and follow the development of this package on GitH
 
 When you generate a series of plots in a code chunk, you can combine them into an animation. It is easy to do so if the output format is HTML---you only need to install the **gifski** package and set the chunk option `animation.hook = "gifski"`. Figure \@ref(fig:pacman) shows a simple "Pac-man" animation created from the code chunk below:
 
-````md
+```` {.md}
 ```{r, animation.hook="gifski"}`r ''`
 for (i in 1:2) {
   pie(c(i %% 2, 6), col = c('red', 'yellow'), labels = NA)
@@ -549,13 +549,13 @@ for (i in 1:2) {
 
 The image format of the animation is GIF, which works well for HTML output, but it is not straightforward to support GIF in LaTeX. That is why you only see two static image frames if you are reading the PDF or printed version of this book in Figure \@ref(fig:pacman). If you read the online version of this book, you will see the actual animation.
 
-Animations can work in PDF, but there are two prerequisites. First, you have to load the LaTeX package [**animate**](https://ctan.org/pkg/animate) (see Section \@ref(latex-extra) for how). Second, you can only use Acrobat Reader to view the animation. Then the chunk option `fig.show = "animate"` will use the **animate** package to create the animation. Below is an example:
+Animations can work in PDF, but there are two prerequisites. First, you have to load the LaTeX package **[animate](https://ctan.org/pkg/animate)** (see Section \@ref(latex-extra) for how). Second, you can only use Acrobat Reader to view the animation. Then the chunk option `fig.show = "animate"` will use the **animate** package to create the animation. Below is an example:
 
 `r import_example('latex-animation.Rmd')`
 
 The time interval between image frames in the animation can be set by the chunk option `interval`. By default, `interval = 1` (i.e., one second).
 
-The R package **animation** (https://github.com/yihui/animation) contains several animation examples to illustrate methods and ideas in statistical computing. The **gganimate** package (https://github.com/thomasp85/gganimate) allows us to create smooth animations based on **ggplot2**. Both packages work with R Markdown.
+The R package **animation** (<https://github.com/yihui/animation>) contains several animation examples to illustrate methods and ideas in statistical computing. The **gganimate** package (<https://github.com/thomasp85/gganimate>) allows us to create smooth animations based on **ggplot2**. Both packages work with R Markdown.
 
 ## Embed an interactive 3D plot with rgl {#rgl-3d}
 
@@ -571,13 +571,15 @@ knitr::include_graphics('images/rgl-3d.png', dpi = NA)
 
 ## Create diagrams {#diagrams}
 
-There are many separate programs (e.g., Graphviz) that can be used to produce diagrams and flowcharts, but it can be easier to manage them directly inside R code chunks in Rmd documents. 
+There are many separate programs (e.g., Graphviz) that can be used to produce diagrams and flowcharts, but it can be easier to manage them directly inside R code chunks in Rmd documents.
 
-While there are several different packages available for R, we will only briefly introduce the package **DiagrammeR** [@R-DiagrammeR], and mention other packages at the end. You can find the full documentation of **DiagrammeR** at https://rich-iannone.github.io/DiagrammeR/. In this section, we will introduce the basic usages and also how to use R code in diagrams.
+While there are several different packages available for R, we will only briefly introduce the package **DiagrammeR** [@R-DiagrammeR], and mention other packages at the end. You can find the full documentation of **DiagrammeR** at <https://rich-iannone.github.io/DiagrammeR/>. In this section, we will introduce the basic usages and also how to use R code in diagrams.
 
 ### Basic diagrams
 
-**DiagrammeR** provides methods to build graphs for a number of different graphing languages. We will present a Graphviz example in this section,^[Depending on your background, this section may be a biased introduction to **DiagrammeR**. Please see its official documentation if you are interested in this package.] but you can also use pure R code to create graphs and diagrams with **DiagrammeR**.
+**DiagrammeR** provides methods to build graphs for a number of different graphing languages. We will present a Graphviz example in this section,[^1] but you can also use pure R code to create graphs and diagrams with **DiagrammeR**.
+
+[^1]: Depending on your background, this section may be a biased introduction to **DiagrammeR**. Please see its official documentation if you are interested in this package.
 
 The RStudio IDE provides native support for Graphviz (`.gv`) and mermaid (`.mmd`) files. Editing these types of files in RStudio has the advantage of syntax highlighting, RStudio also allows you to preview of the diagrams by clicking the "Preview" button on the toolbar. Figure \@ref(fig:diagram-profit) is a simple flowchart example that has four rectangles representing four steps, generated by the code below:
 
@@ -629,7 +631,7 @@ DiagrammeR::grViz("
 
 ### Other packages for making diagrams
 
-You may also check out these packages for creating diagrams: **nomnoml** (https://github.com/javierluraschi/nomnoml), **diagram** (https://cran.r-project.org/package=diagram), **dagitty** (https://cran.r-project.org/package=dagitty), **ggdag** (https://github.com/malcolmbarrett/ggdag), and **plantuml** (https://github.com/rkrug/plantuml).
+You may also check out these packages for creating diagrams: **nomnoml** (<https://github.com/javierluraschi/nomnoml>), **diagram** (<https://cran.r-project.org/package=diagram>), **dagitty** (<https://cran.r-project.org/package=dagitty>), **ggdag** (<https://github.com/malcolmbarrett/ggdag>), and **plantuml** (<https://github.com/rkrug/plantuml>).
 
 ## Escape special characters {#special-chars}
 
@@ -641,14 +643,13 @@ Some characters have special meanings in the Markdown syntax. If you want these 
 
 It is useful to comment out text in the source document, which will not be displayed in the final output document. We can use the HTML syntax `<!-- your comment -->`. The comments will not be displayed in any output format.
 
-Comments can span either a single line or multiple lines. This may be useful for you to write draft content.
-<!-- , and it also allows us to comment out code chunks (and prevent them from being run in knitr). -->
+Comments can span either a single line or multiple lines. This may be useful for you to write draft content. <!-- , and it also allows us to comment out code chunks (and prevent them from being run in knitr). -->
 
 ## Omit a heading in the table of contents {#toc-unlisted}
 
 If you do not want certain section headings to be included in the table of contents, you can add two classes to the heading: `unlisted` and `unnumbered`. For example:
 
-```md
+``` {.md}
 # Section heading {.unlisted .unnumbered}
 ```
 
@@ -709,19 +710,19 @@ gsub('^##', '#', readLines('ast.md'))
 
 Usually it is not robust to manipulate a structured document with regular expressions, because there are almost always exceptions, e.g., what if `##` means a comment in R code? The AST gives you the structured data, so you know for sure that you are modifying the expected elements.
 
-Pandoc has extensive documentation on Lua filters at https://pandoc.org/lua-filters.html, where you can find a large number of examples. You can also find some filters written by the community in the GitHub repository at https://github.com/pandoc/lua-filters.
+Pandoc has extensive documentation on Lua filters at <https://pandoc.org/lua-filters.html>, where you can find a large number of examples. You can also find some filters written by the community in the GitHub repository at <https://github.com/pandoc/lua-filters>.
 
 In the R Markdown world, below is an incomplete list of packages that have made use of Lua filters (usually they are in the `inst/` directory):
 
-- The **rmarkdown** package (https://github.com/rstudio/rmarkdown) contains filters that insert page breaks (see Section \@ref(pagebreaks)) and generate custom blocks (see Section \@ref(custom-blocks)).
+-   The **rmarkdown** package (<https://github.com/rstudio/rmarkdown>) contains filters that insert page breaks (see Section \@ref(pagebreaks)) and generate custom blocks (see Section \@ref(custom-blocks)).
 
-- The **pagedown** package (https://github.com/rstudio/pagedown) contains filters that help implement footnotes and the list of figures on HTML pages.
+-   The **pagedown** package (<https://github.com/rstudio/pagedown>) contains filters that help implement footnotes and the list of figures on HTML pages.
 
-- The **govdown** package (https://github.com/ukgovdatascience/govdown) contains filters to convert Pandoc's fenced `Div`s to appropriate HTML tags.
+-   The **govdown** package (<https://github.com/ukgovdatascience/govdown>) contains filters to convert Pandoc's fenced `Div`s to appropriate HTML tags.
 
 For R Markdown users who do not want to create R packages to ship the Lua filters (like the above packages), you may store these Lua scripts anywhere on your computer, and apply them through the `pandoc_args` option of an R Markdown output format, e.g.,
 
-```yaml
+``` {.yaml}
 ---
 output:
   html_document:

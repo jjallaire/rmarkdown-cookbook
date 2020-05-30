@@ -6,7 +6,9 @@ For those seeking lower-level basics, please read Chapter 2 of the R Markdown De
 
 ## The R Markdown process {#rmarkdown-process}
 
-R Markdown combines several different processes together to create documents, and one of the main sources of confusion from R Markdown is how all the components work together.^[Allison Horst has created an amusing artwork that describes the R Markdown process as wizardry: https://github.com/allisonhorst/stats-illustrations/raw/master/rstats-artwork/rmarkdown_wizards.png.] Fortunately, as a user, it is not essential to understand all the inner workings of these processes to be able to create documents. However, as a user who may be seeking to alter the behavior of a document, it is important to understand which component is responsible for what. This makes it a lot easier to seek help as you can target your searches on the correct area.
+R Markdown combines several different processes together to create documents, and one of the main sources of confusion from R Markdown is how all the components work together.[^1] Fortunately, as a user, it is not essential to understand all the inner workings of these processes to be able to create documents. However, as a user who may be seeking to alter the behavior of a document, it is important to understand which component is responsible for what. This makes it a lot easier to seek help as you can target your searches on the correct area.
+
+[^1]: Allison Horst has created an amusing artwork that describes the R Markdown process as wizardry: <https://github.com/allisonhorst/stats-illustrations/raw/master/rstats-artwork/rmarkdown_wizards.png>.
 
 The basic workflow structure for an R Markdown document is shown in Figure \@ref(fig:rmdworkflow), highlighting the steps (arrows) and the intermediate files that are created before producing the output. The whole process is implemented via the function `rmarkdown::render()`. Each stage is explained in further detail below.
 
@@ -24,19 +26,19 @@ If the output format is PDF, there is an additional layer of processing, as Pand
 
 In short, `rmarkdown::render()` = `knitr::knit()` + Pandoc (+ LaTeX for PDF output only).
 
-Robin Linacre has written a nice summary of the relationship between R Markdown, **knitr**, and Pandoc at https://stackoverflow.com/q/40563479/559676, which contains more technical details than the above overview.
+Robin Linacre has written a nice summary of the relationship between R Markdown, **knitr**, and Pandoc at <https://stackoverflow.com/q/40563479/559676>, which contains more technical details than the above overview.
 
 Note that not all R Markdown documents are eventually compiled through Pandoc. The intermediate `.md` file could be compiled by other Markdown renderers. Below are two examples:
 
-- The **xaringan** package [@R-xaringan] passes the `.md` output to a JavaScript library, which renders the Markdown content in the web browser.
+-   The **xaringan** package [@R-xaringan] passes the `.md` output to a JavaScript library, which renders the Markdown content in the web browser.
 
-- The **blogdown** package [@R-blogdown] supports the `.Rmarkdown` document format, which is knitted to `.markdown`, and this Markdown document is usually rendered to HTML by a site generator named Hugo.
+-   The **blogdown** package [@R-blogdown] supports the `.Rmarkdown` document format, which is knitted to `.markdown`, and this Markdown document is usually rendered to HTML by a site generator named Hugo.
 
 ## Code chunks and inline R code {#r-code}
 
 An R Markdown document consists of intermingled prose (narratives) and code. There are two types of code in an Rmd document: code chunks, and inline R code. Below is a quick example:
 
-````md
+```` {.md}
 ```{r}`r ''`
 x <- 5  # radius of a circle
 ```
@@ -45,13 +47,13 @@ For a circle with the radius `r knitr::inline_expr('x')`,
 its area is `r knitr::inline_expr('pi * x^2')`.
 ````
 
-A code chunk usually starts with ```` ```{}```` and ends with ```` ``` ````. You can write any number of lines of code in it. Inline R code is embedded in the narratives of the document using the syntax `` `r ` ``. In the above example, we defined a variable `x` in a code chunk, which is the radius of a circle, and calculated its area in the next paragraph.
+A code chunk usually starts with ```` ```{} ```` and ends with ```` ``` ````. You can write any number of lines of code in it. Inline R code is embedded in the narratives of the document using the syntax `` `r ` ``. In the above example, we defined a variable `x` in a code chunk, which is the radius of a circle, and calculated its area in the next paragraph.
 
 You can customize the behavior and output of code chunks through chunk options (provided inside the curly brackets `{}`). You will find several examples in Chapter \@ref(chunk-options). You may write code of other languages in code chunks, too (see Chapter \@ref(other-languages)).
 
 ## Writing Markdown with the remedy package {#remedy}
 
-If you are not very familiar with Markdown yet, we recommend that you try the **remedy** package (https://github.com/ThinkR-open/remedy), which has provided a series of RStudio addins to help you write Markdown content by clicking the addins. A GIF animation is worth a thousand words. Please check out its homepage for many GIFs that quickly shows you what this package can do.
+If you are not very familiar with Markdown yet, we recommend that you try the **remedy** package (<https://github.com/ThinkR-open/remedy>), which has provided a series of RStudio addins to help you write Markdown content by clicking the addins. A GIF animation is worth a thousand words. Please check out its homepage for many GIFs that quickly shows you what this package can do.
 
 ## Render an R script to a report {#spin}
 
@@ -61,15 +63,15 @@ When rendering an R script to a report, the function `knitr::spin()` is called t
 
 If you want granular control over the elements in the report, below are a few syntax rules to help you:
 
-- Roxygen comments will be treated as normal text. A roxygen comment is an R comment that starts with `#'`. This can help you write narratives in your report. You can use any Markdown syntax in the comments.
+-   Roxygen comments will be treated as normal text. A roxygen comment is an R comment that starts with `#'`. This can help you write narratives in your report. You can use any Markdown syntax in the comments.
 
-- A comment starting with `#+` is treated as the **knitr** chunk header. For example, `knitr::spin()` will translate the comment `#+ label, fig.width=5` to the chunk header ```` ```{r label, fig.width=5}```` in R Markdown.
+-   A comment starting with `#+` is treated as the **knitr** chunk header. For example, `knitr::spin()` will translate the comment `#+ label, fig.width=5` to the chunk header ```` ```{r label, fig.width=5} ```` in R Markdown.
 
-- R code of the form `{{ code }}` is translated to an inline R expression in R Markdown. Please note that `{{ code }}` must be on its own line.
+-   R code of the form `{{ code }}` is translated to an inline R expression in R Markdown. Please note that `{{ code }}` must be on its own line.
 
-- The YAML frontmatter can be written in the beginning of the R script in roxygen comments, too.
+-   The YAML frontmatter can be written in the beginning of the R script in roxygen comments, too.
 
-- Any text between `/*` and `*/` will be ignored (i.e., they are treated as true comments).
+-   Any text between `/*` and `*/` will be ignored (i.e., they are treated as true comments).
 
 Below is a full example illustrating the above rules:
 
@@ -123,7 +125,7 @@ Inline R expressions are ignored by default. If you want to include them in the 
 
 As mentioned in [Section 2.2](https://bookdown.org/yihui/rmarkdown/compile.html) of the R Markdown Definitive Guide [@rmarkdown2018], there are several ways to compile an Rmd document. One of them is to use R Markdown Notebooks, with the output format `html_notebook`, e.g.,
 
-```yaml
+``` {.yaml}
 ---
 title: An R Markdown Notebook
 output: html_notebook
@@ -132,11 +134,11 @@ output: html_notebook
 
 When you use this output format in RStudio, the `Knit` button on the toolbar will become the `Preview` button.
 
-The main advantage of using notebooks is that you can work on Rmd document _iteratively in the same R session_. You can run one code chunk at a time by clicking the green arrow button on each chunk, and you will see the text or plot output in the editor. When you click the `Preview` button on the toolbar, it only renders the Rmd document to an HTML output document containing the output of all code chunks that you have already executed. The `Preview` button does not execute any code chunks. By comparison, when you use other output formats and hit the `Knit` button, RStudio launches a new R session to compile the whole document (hence all code chunks are executed at once), which usually takes more time.
+The main advantage of using notebooks is that you can work on Rmd document *iteratively in the same R session*. You can run one code chunk at a time by clicking the green arrow button on each chunk, and you will see the text or plot output in the editor. When you click the `Preview` button on the toolbar, it only renders the Rmd document to an HTML output document containing the output of all code chunks that you have already executed. The `Preview` button does not execute any code chunks. By comparison, when you use other output formats and hit the `Knit` button, RStudio launches a new R session to compile the whole document (hence all code chunks are executed at once), which usually takes more time.
 
 If you do not like RStudio's default behavior of showing output of code chunks inline when you run them individually, you can uncheck the option "Show output inline for all R Markdown documents" from the menu `Tools -> Global Options -> R Markdown`. After that, when you run a code chunk, the output will be shown in the R console instead of inside the source editor. You can also set this option for an individual Rmd document in its YAML metadata:
 
-```yaml
+``` {.yaml}
 editor_options:
   chunk_output_type: console
 ```

@@ -6,7 +6,7 @@ There are more than 50 chunk options that can be used to fine-tune the behavior 
 
 In the following sections, we only show examples of applying chunk options to individual code chunks. However, please be aware of the fact that any chunk options can also be applied globally to a whole document, so you do not have to repeat the options in every single code chunk. To set chunk options globally, call `knitr::opts_chunk$set()` in a code chunk (usually the first one in the document), e.g.,
 
-````md
+```` {.md}
 ```{r, include=FALSE}`r ''`
 knitr::opts_chunk$set(
   comment = "#>", echo = FALSE, fig.width = 6
@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 Usually chunk options take constant values (e.g., `fig.width = 6`), but they can actually take values from arbitrary R expressions, no matter how simple or complicated the expressions are. A special case is a variable passed to a chunk option (note that a variable is also an R expression). For example, you can define a figure width in a variable in the beginning of a document, and use it later in other code chunks, so you will be able to easily change the width in the future:
 
-````md
+```` {.md}
 ```{r}`r ''`
 my_width <- 7
 ```
@@ -30,7 +30,7 @@ plot(cars)
 
 Below is an example of using an `if-else` statement in a chunk option:
 
-````md
+```` {.md}
 ```{r}`r ''`
 fig_small <- FALSE  # change to TRUE for larger figures
 width_small <- 4
@@ -44,7 +44,7 @@ plot(cars)
 
 And we have one more example below in which we evaluate (i.e., execute) a code chunk only if a required package is available:
 
-````md
+```` {.md}
 ```{r, eval=require('leaflet')}`r ''`
 library(leaflet)
 leaflet() %>% addTiles()
@@ -57,7 +57,7 @@ In case you do not know it, `require('package')` returns `TRUE` if the package i
 
 Sometimes you may want to show errors on purpose (e.g., in an R tutorial). By default, errors in the code chunks of an Rmd document will halt R. If you want to show the errors without stopping R, you may use the chunk option `error = TRUE`, e.g.,
 
-````md
+```` {.md}
 ```{r, error=TRUE}`r ''`
 1 + "a"
 ```
@@ -75,7 +75,7 @@ In R Markdown, `error = FALSE` is the default, which means R should stop on erro
 
 In most cases, you may want one image format for one plot, such as `png` or `pdf`. The image format is controlled by the chunk option `dev` (i.e., the graphical device to render the plots). This option can take a vector of device names, e.g.,
 
-````md
+```` {.md}
 ```{r, dev=c('png', 'pdf', 'svg', 'tiff')}`r ''`
 plot(cars)
 ```
@@ -93,7 +93,7 @@ The most appropriate use case of caching is to save and reload R objects that ta
 
 As we briefly mentioned earlier, the cache depends on chunk options. If you change any chunk options (except the option `include`), the cache will be invalidated. This feature can be used to solve a common problem. That is, when you read an external data file, you may want to invalidate the cache when the data file is updated. Simply using `cache = TRUE` is not enough:
 
-````md
+```` {.md}
 ```{r import-data, cache=TRUE}`r ''`
 d <- read.csv('my-precious.csv')
 ```
@@ -122,7 +122,7 @@ When caching is turned on via the chunk option `cache = TRUE`, **knitr** will wr
 
 When a code chunk does not have any side-effects (such as plots), it is safe to use the same cache database for all output formats, which can save you time. For example, when you read a large data object or run a time-consuming model, the result does not depend on the output format, so you can use the same cache database. You can specify the path to the database via the chunk option `cache.path` on a code chunk, e.g.,
 
-````md
+```` {.md}
 ```{r important-computing, cache=TRUE, cache.path="cache/"}`r ''`
 ```
 ````
@@ -135,7 +135,7 @@ We do not recommend that you set `cache = TRUE` or `cache.path` globally in a do
 
 When the chunk option `cache = TRUE`, cached objects will be lazy-loaded into the R session, which means an object will not be read from the cache database until it is actually used in the code. This can save you some memory when not all objects are used later in the document. For example, you may have read a large data but only used a subset in the subsequent analysis, and the original data object will not be loaded from the cache database:
 
-````md
+```` {.md}
 ```{r, read-data, cache=TRUE}`r ''`
 full <- read.csv("HUGE.csv")
 rows <- subset(full, price > 100)
@@ -149,7 +149,7 @@ plot(rows)
 
 However, when an object is too large, you may run into an error like this:
 
-```r
+``` {.r}
 Error in lazyLoadDBinsertVariable(vars[i], ... 
   long vectors not supported yet: ...
 Execution halted
@@ -167,7 +167,7 @@ One frequently asked question about **knitr** is how to hide package loading mes
 
 You can also selectively show or hide these elements by indexing them. In the following example, we only show the fourth and fifth expressions of the R source code (note that a comment counts as one expression), the first two messages, and the second and third warnings:
 
-````md
+```` {.md}
 ```{r, echo=c(4, 5), message=c(1, 2), warning=2:3}`r ''`
 # one way to generate random N(0, 1) numbers
 x <- qnorm(runif(10))
@@ -189,7 +189,7 @@ Similarly, you can choose which plots to show or hide by using indices for the `
 
 Sometimes we may want to execute a code chunk without showing any output at all. Instead of using separate options mentioned in Section \@ref(hide-one), we can suppress the entire output of the code chunk using a single option `include = FALSE`, e.g.,
 
-````md
+```` {.md}
 ```{r, include=FALSE}`r ''`
 # any R code here
 ```
@@ -215,7 +215,7 @@ Below is the same chunk but it does not have the option `collapse = TRUE` (the d
 
 When you set the chunk option `tidy = TRUE`, the R source code will be reformatted by the `tidy_source()` function in the **formatR** package [@R-formatR]. The `tidy_source()` can reformat the code in several aspects, such as adding spaces around most operators, indenting the code properly, and replacing the assignment operator `=` with `<-`. The chunk option `tidy.opts` can be a list of arguments to be passed to `formatR::tidy_source()`, e.g.,
 
-````md
+```` {.md}
 ```{r, tidy=TRUE, tidy.opts=list(arrow=TRUE, indent=2)}`r ''`
 # messy R code...
 1+            1
@@ -228,7 +228,7 @@ print('Hello world!') # indent by 2 spaces
 
 In Section \@ref(text-width), we mentioned how to control the width of text output. If you want to control the width of the source code, you may try the `width.cutoff` argument when `tidy = TRUE`, e.g.,
 
-````md
+```` {.md}
 ```{r, tidy=TRUE, tidy.opts=list(width.cutoff=50)}`r ''`
 # a long expression
 1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+
@@ -236,9 +236,9 @@ In Section \@ref(text-width), we mentioned how to control the width of text outp
 ```
 ````
 
-Please read the help page `?formatR::tidy_source` to know the possible arguments, and also see https://yihui.org/formatR/ for examples and limitations of this function.
+Please read the help page `?formatR::tidy_source` to know the possible arguments, and also see <https://yihui.org/formatR/> for examples and limitations of this function.
 
-Alternatively, you may use the **styler** package (https://styler.r-lib.org) to reformat your R code if you set the chunk option `tidy = 'styler'`. The R code will be formatted with the function `styler::style_text()`. The **styler** package has richer features than **formatR**. For example, it can align function arguments and works with the pipe operator `%>%`. The chunk option `tidy.opts` can also be used to pass additional arguments to `styler::style_text()`.
+Alternatively, you may use the **styler** package (<https://styler.r-lib.org>) to reformat your R code if you set the chunk option `tidy = 'styler'`. The R code will be formatted with the function `styler::style_text()`. The **styler** package has richer features than **formatR**. For example, it can align function arguments and works with the pipe operator `%>%`. The chunk option `tidy.opts` can also be used to pass additional arguments to `styler::style_text()`.
 
 By default, `tidy = FALSE` and your R code will not be reformatted.
 
@@ -246,7 +246,7 @@ By default, `tidy = FALSE` and your R code will not be reformatted.
 
 By default, text output from code chunks will be written out verbatim with two leading hashes (see Section \@ref(opts-comment)). The text is verbatim because **knitr** puts it in fenced code blocks. For example, the raw output of the code `1:5` from **knitr** is:
 
-````md
+```` {.md}
 ```
 ## [1] 1 2 3 4 5
 ```
@@ -254,7 +254,7 @@ By default, text output from code chunks will be written out verbatim with two l
 
 Sometimes you may not want verbatim text output, but treat text output as Markdown content instead. For example, you may want to write out a section header with `cat('# This is a header')`, but the raw output is:
 
-````md
+```` {.md}
 ```
 ## # This is a header
 ```
@@ -262,9 +262,9 @@ Sometimes you may not want verbatim text output, but treat text output as Markdo
 
 You do not want the text to be in a fenced code block (or the leading hashes). That is, you want the raw output to be exactly the character string passed to `cat()`:
 
-````md
+``` {.md}
 # This is a header
-````
+```
 
 The solution to this problem is the chunk option `results = 'asis'`. This option tells **knitr** not to wrap your text output in verbatim code blocks, but treat it "as is". This can be particularly useful when you want to generate content dynamically from R code. For example, you may generate the list of column names of the `iris` data from the code chunk below with the option `results = 'asis'`:
 
@@ -283,7 +283,7 @@ Below is a full example that shows how you can generate section headers, paragra
 
 Please note that we added line breaks (`\n`) excessively in the code. That is because we want different elements to be separated clearly in the Markdown content. It is harmless to use an excessive number of line breaks between different elements, whereas it can be problematic if there are not enough line breaks. For example, there is much ambiguity in the Markdown text below:
 
-```md
+``` {.md}
 # Is this a header?
 Is this a paragraph or a part of the header?
 ![How about this image?](foo.png)
@@ -292,7 +292,7 @@ Is this a paragraph or a part of the header?
 
 With more empty lines (which could be generated by `cat('\n')`), the ambiguity will be gone:
 
-```md
+``` {.md}
 # Yes, a header!
 
 And definitely a paragraph.
@@ -302,7 +302,7 @@ And definitely a paragraph.
 # Absolutely another header
 ```
 
-The `cat()` function is not the only function that can generate text output. Another commonly used function is `print()`. Please note that `print()` is often _implicitly_ called to print objects, which is why you see output after typing out an object or value in the R console. For example, when you type `1:5` in the R console and hit the `Enter` key, you see the output because R actually called `print(1:5)` implicitly. This can be highly confusing when you fail to generate output inside an expression (such as a `for`-loop) with objects or values that would otherwise be correctly printed if they were typed in the R console. This topic is quite technical, and I have written [a blog post](https://yihui.org/en/2017/06/top-level-r-expressions/) to explain it. If you are not interested in the technical details, just remember this rule: if you do not see output from a `for`-loop, you should probably print objects explicitly with the `print()` function.
+The `cat()` function is not the only function that can generate text output. Another commonly used function is `print()`. Please note that `print()` is often *implicitly* called to print objects, which is why you see output after typing out an object or value in the R console. For example, when you type `1:5` in the R console and hit the `Enter` key, you see the output because R actually called `print(1:5)` implicitly. This can be highly confusing when you fail to generate output inside an expression (such as a `for`-loop) with objects or values that would otherwise be correctly printed if they were typed in the R console. This topic is quite technical, and I have written [a blog post](https://yihui.org/en/2017/06/top-level-r-expressions/) to explain it. If you are not interested in the technical details, just remember this rule: if you do not see output from a `for`-loop, you should probably print objects explicitly with the `print()` function.
 
 ## Remove leading hashes in text output {#opts-comment}
 
@@ -310,7 +310,7 @@ The `cat()` function is not the only function that can generate text output. Ano
 
 By default, R code output will have two hashes `##` inserted in front of the text output. We can alter this behavior through the `comment` chunk option, which defaults to a character string `"##"`. We can use an empty string if we want to remove the hashes. For example:
 
-````md
+```` {.md}
 ```{r, comment=""}`r ''`
 1:100
 ```
@@ -330,7 +330,7 @@ If you remove the hashes via `comment = ""`, it will not be easy for you to run 
 
 One argument in favor of `comment = ""` is that it makes the text output look familiar to R console users. In the R console, you do not see hashes in the beginning of lines of text output. If you want to truly mimic the behavior of the R console, you can actually use `comment = ""` in conjunction with `prompt = TRUE`, e.g.,
 
-````md
+```` {.md}
 ```{r, comment="", prompt=TRUE}`r ''`
 1 + 1
 if (TRUE) {
@@ -447,7 +447,7 @@ fit = lm(dist ~ speed, data = cars)
 abline(fit)
 ```
 
-If you want to keep modifying a plot in a _different_ code chunk, please see Section \@ref(global-device).
+If you want to keep modifying a plot in a *different* code chunk, please see Section \@ref(global-device).
 
 ## Customize the printing of objects in chunks {#opts-render}
 
@@ -465,7 +465,7 @@ The **printr** package [@R-printr] has provided a few S3 methods to automaticall
 
 If you find this technique too advanced for you, some R Markdown output formats such as `html_document` and `pdf_document` also provide an option `df_print`, which allows you to customize the printing behavior of data frames. For example, if you want to print data frames as tables via `knitr::kable()`, you may set the option:
 
-```yaml
+``` {.yaml}
 ---
 output:
   html_document:
@@ -477,7 +477,7 @@ Please see the help pages of the output format functions for the possible values
 
 In fact, you can completely replace the printing function `knit_print()` through the chunk option `render`, which can take any function to print objects. For example, if you want to print objects using the **pander** package, you may set the chunk option `render` to the function `pander::pander()`:
 
-````md
+```` {.md}
 ```{r, render=pander::pander}`r ''`
 iris
 ```
@@ -487,7 +487,7 @@ The `render` option gives you complete freedom on how to print your R objects.
 
 ## Option hooks {#option-hooks}
 
-Sometimes you may want to change certain chunk options dynamically according to the values of other chunk options, and you may use the object `opts_hooks` to set up an _option hook_ to do it. An option hook is a function associated with the option and to be executed when a corresponding chunk option is not `NULL`. For example, we can tweak the `fig.width` option so that it is always no smaller than `fig.height`:
+Sometimes you may want to change certain chunk options dynamically according to the values of other chunk options, and you may use the object `opts_hooks` to set up an *option hook* to do it. An option hook is a function associated with the option and to be executed when a corresponding chunk option is not `NULL`. For example, we can tweak the `fig.width` option so that it is always no smaller than `fig.height`:
 
 ```{r, eval=FALSE}
 knitr::opts_hooks$set(fig.width = function(options) {
@@ -500,7 +500,7 @@ knitr::opts_hooks$set(fig.width = function(options) {
 
 Because `fig.width` will never be `NULL`, this hook function is always executed before a code chunk to update its chunk options. For the code chunk below, the actual value of `fig.width` will be 6 instead of the initial 5 if the above option hook has been set up:
 
-````md
+```` {.md}
 ```{r fig.width = 5, fig.height = 6}`r ''`
 plot(1:10)
 ```
@@ -508,7 +508,7 @@ plot(1:10)
 
 As another example, we rewrite the last example in Section \@ref(opts-comment) so we can use a single chunk option `console = TRUE` to imply `comment = ""` and `prompt = TRUE`. Note that `console` is not a built-in **knitr** chunk option but a custom and arbitrary option name instead. Its default value will be `NULL`. Below is a full example:
 
-````md
+```` {.md}
 ```{r, include=FALSE}`r ''`
 knitr::opts_hooks$set(console = function(options) {
   if (isTRUE(options$console)) {
@@ -584,9 +584,9 @@ Basically, the option hooks append the attribute `.numberLines` to output blocks
 
 With the above setup, you can use the chunk option `numberLines` on a code chunk to decide which of its output blocks will have line numbers, e.g., `numberLines = c('source', 'output')`. Specifying `numberLines = NULL` removes line numbers completely.
 
-You may wonder why not setting the chunk options directly, e.g., just `knitr::opts_chunk$set(attr.source = '.numberLines')` like we did in Section \@ref(number-lines). The advantage of using the option hooks here is that they only _append_ the attribute `.numberLines` to chunk options, which means they will not _override_ existing chunk option values, e.g., the source code block of the chunk below will be numbered (with the above setup), and the numbers start from the second line:
+You may wonder why not setting the chunk options directly, e.g., just `knitr::opts_chunk$set(attr.source = '.numberLines')` like we did in Section \@ref(number-lines). The advantage of using the option hooks here is that they only *append* the attribute `.numberLines` to chunk options, which means they will not *override* existing chunk option values, e.g., the source code block of the chunk below will be numbered (with the above setup), and the numbers start from the second line:
 
-````md
+```` {.md}
 ```{r, attr.source='startFrom="2"'}`r ''`
 # this comment line will not be numbered
 1 + 1
@@ -595,7 +595,7 @@ You may wonder why not setting the chunk options directly, e.g., just `knitr::op
 
 It is equivalent to:
 
-````md
+```` {.md}
 ```{r, attr.source=c('startFrom="2"', '.numberLines'}`r ''`
 # this comment line will not be numbered
 1 + 1

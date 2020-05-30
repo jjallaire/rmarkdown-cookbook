@@ -8,7 +8,7 @@ We want to offer a note of caution before we start, however. One benefit of R Ma
 
 The general structure of a LaTeX document is like this:
 
-```tex
+``` {.tex}
 \documentclass{article}
 % preamble
 \begin{document}
@@ -20,7 +20,7 @@ That is, you declare the document class in `\documentclass{}`, load certain LaTe
 
 For example, below is a trick that turns hyperlinks on text into footnotes. This trick is useful when the PDF output document is printed on paper, because readers will not be able to click the links (generated from `\href{URL}{text}`) on paper but can see the URLs in footnotes. This trick displays both the text and URL.
 
-```tex
+``` {.tex}
 % you may want to save a copy of \href before redefining it
 % \let\oldhref\href
 \renewcommand{\href}[2]{#2\footnote{\url{#1}}}
@@ -28,7 +28,7 @@ For example, below is a trick that turns hyperlinks on text into footnotes. This
 
 You can save the above code in a file with an arbitrary filename, e.g., `preamble.tex`. Then include it in the preamble through:
 
-```yaml
+``` {.yaml}
 output:
   pdf_document:
     includes:
@@ -41,9 +41,9 @@ Another way to add code to the preamble is to use the `header-includes` field in
 
 ## Pandoc options for LaTeX output {#latex-variables}
 
-If you are using the default Pandoc template for LaTeX output, there are several options that you may set to adjust the appearance of the PDF output document. We list a few example options below, and you may see https://pandoc.org/MANUAL.html#variables-for-latex for a full list.
+If you are using the default Pandoc template for LaTeX output, there are several options that you may set to adjust the appearance of the PDF output document. We list a few example options below, and you may see <https://pandoc.org/MANUAL.html#variables-for-latex> for a full list.
 
-```yaml
+``` {.yaml}
 documentclass: book
 classoption:
   - twocolumn
@@ -54,31 +54,33 @@ fontsize: 12pt
 links-as-notes: true
 ```
 
-The meanings of these options should be clear if you have some knowledge about LaTeX. The `documentclass` option sets the document class, e.g., `article`, `book`, and `report`, etc. The `classoption` is a list of options to be passed to the document class, e.g., you can create a two-column document with the `twocolumn` option,^[This option changes the layout of the whole document, but if you want to switch back to the one-column mode from a certain point, you may insert a command `\onecolumn` at that point. If you want to continue the two-column mode, insert `\twocolumn`.] or the landscape layout with the `landscape` option (the default is the portrait layout). The `papersize` option sets the paper size, e.g., `a4`, `paper`, or `a5`. The `linestretch` option sets the line spacing. The `fontsize` option sets the font size, e.g., `10pt`, `11pt`, or `12pt`. The `links-as-notes` option turns links on text to footnotes, which is useful when the PDF is printed on paper, because readers will not be able to click the links on paper but can see the URLs in footnotes.
+The meanings of these options should be clear if you have some knowledge about LaTeX. The `documentclass` option sets the document class, e.g., `article`, `book`, and `report`, etc. The `classoption` is a list of options to be passed to the document class, e.g., you can create a two-column document with the `twocolumn` option,[^1] or the landscape layout with the `landscape` option (the default is the portrait layout). The `papersize` option sets the paper size, e.g., `a4`, `paper`, or `a5`. The `linestretch` option sets the line spacing. The `fontsize` option sets the font size, e.g., `10pt`, `11pt`, or `12pt`. The `links-as-notes` option turns links on text to footnotes, which is useful when the PDF is printed on paper, because readers will not be able to click the links on paper but can see the URLs in footnotes.
+
+[^1]: This option changes the layout of the whole document, but if you want to switch back to the one-column mode from a certain point, you may insert a command `\onecolumn` at that point. If you want to continue the two-column mode, insert `\twocolumn`.
 
 Changing fonts can be a little trickier. It depends on which LaTeX engine you are using. If you are using `pdflatex`, which is usually the default engine for most LaTeX-based output formats, you may use the `fontfamily` option to select a LaTeX font package to be loaded in your document to change the font, e.g.,
 
-```yaml
+``` {.yaml}
 fontfamily: accanthis
 output:
   pdf_document: 
     latex_engine: pdflatex
 ```
 
-Then the document will use the font ["Accanthis"](https://tug.org/FontCatalogue/accanthis/). You may see https://tug.org/FontCatalogue/ for a list of many other LaTeX font packages. If your LaTeX distribution is TinyTeX, the font packages should be automatically installed if they have not been installed (see Section \@ref(install-latex)).
+Then the document will use the font ["Accanthis"](https://tug.org/FontCatalogue/accanthis/). You may see <https://tug.org/FontCatalogue/> for a list of many other LaTeX font packages. If your LaTeX distribution is TinyTeX, the font packages should be automatically installed if they have not been installed (see Section \@ref(install-latex)).
 
 If you use the LaTeX engine `xelatex` or `lualatex`, you will be able to select fonts that are available on your local computer, and do not have to install additional LaTeX packages. YAML options like `mainfont`, `sansfont`, and `monofont` can be used to specify the main font, sans serif font, and typewriter font, respectively, e.g.,
 
-```yaml
+``` {.yaml}
 mainfont: Arial
 output:
   pdf_document: 
     latex_engine: xelatex
 ```
 
-You can also use some of those LaTeX options when you generate Beamer slides, because a Beamer document is a LaTeX document, too. In addition, Pandoc has provided a few more options for Beamer slides, which can be found at https://pandoc.org/MANUAL.html#variables-for-beamer-slides. For example, you can specify the author affiliation via the `institute` option:
+You can also use some of those LaTeX options when you generate Beamer slides, because a Beamer document is a LaTeX document, too. In addition, Pandoc has provided a few more options for Beamer slides, which can be found at <https://pandoc.org/MANUAL.html#variables-for-beamer-slides>. For example, you can specify the author affiliation via the `institute` option:
 
-```yaml
+``` {.yaml}
 ---
 output: beamer_presentation
 institute: "University of Hackers"
@@ -101,7 +103,7 @@ knitr::include_graphics("images/latex-logo.png", dpi = NA)
 
 An alternative method that does not require a special LaTeX package (**titling**) is to just insert the image to the `title` field using the Markdown syntax. For example:
 
-```yaml
+``` {.yaml}
 title: |
   ![](logo.jpg){width=1in}  
   Adding a Logo to LaTeX Title
@@ -119,7 +121,7 @@ The use of additional LaTeX packages can allow for extensive customization of do
 
 We can load additional LaTeX packages using the `extra_dependencies` option within the `pdf_document` YAML settings. This allows us to provide a list of LaTeX packages to be loaded in the intermediate LaTeX output document, e.g.,
 
-```yaml
+``` {.yaml}
 ---
 title: "Using more LaTeX packages"
 output: 
@@ -130,7 +132,7 @@ output:
 
 If you need to specify options when loading the package, you can add a second-level to the list and provide the options as a list, e.g.,
 
-```yaml
+``` {.yaml}
 output: 
   pdf_document:
     extra_dependencies:
@@ -141,7 +143,7 @@ output:
 
 For those familiar with LaTeX, this is equivalent to the following LaTeX code:
 
-```tex
+``` {.tex}
 \usepackage[labelfont={bf}]{caption} 
 \usepackage[unicode=true, breaklinks=true]{hyperref}
 \userpackage{lmodern}
@@ -151,15 +153,15 @@ For those familiar with LaTeX, this is equivalent to the following LaTeX code:
 
 There is an extensive community for LaTeX, and there are over 4,000 packages available through the [Comprehensive TeX Archive Network](https://ctan.org) (CTAN). As some examples of LaTeX packages you could consider using within your report:
 
-- [pdfpages](https://ctan.org/pkg/pdfpages): include full PDF pages from an external PDF document within your document.
-- [caption](https://ctan.org/pkg/caption): change the appearance of caption subtitles. For example, you can make the figure title italic or bold.
-- [fancyhdr](https://ctan.org/pkg/fancyhdr): change the style of running headers of all pages.
+-   [pdfpages](https://ctan.org/pkg/pdfpages): include full PDF pages from an external PDF document within your document.
+-   [caption](https://ctan.org/pkg/caption): change the appearance of caption subtitles. For example, you can make the figure title italic or bold.
+-   [fancyhdr](https://ctan.org/pkg/fancyhdr): change the style of running headers of all pages.
 
 ## Use a custom Pandoc LaTeX template {#latex-template}
 
 Pandoc converts Markdown to LaTeX through a template. The template is a LaTeX file containing Pandoc variables, and Pandoc will replace these variables with their values. Below is a simple template that only contains a single variable `$body$`:
 
-```tex
+``` {.tex}
 \documentclass{article}
 \begin{document}
 $body$
@@ -170,19 +172,20 @@ The value of `$body$` is the LaTeX code generated from the body of the Markdown 
 
 If the LaTeX customization methods in Sections \@ref(latex-preamble), \@ref(latex-variables), and \@ref(latex-extra) are not enough for you, you may try to use a custom template instead. A template allows you to use arbitrary LaTeX code in it, hence is much more flexible. To use a template, include the path of the template in the `template` option of `pdf_document`, e.g.,
 
-```yaml
+``` {.yaml}
 output:
   pdf_document:
     template: my-template.tex
 ```
 
-The default LaTeX template of Pandoc can be found at https://github.com/jgm/pandoc/tree/master/data/templates (named `default.latex`).
+The default LaTeX template of Pandoc can be found at <https://github.com/jgm/pandoc/tree/master/data/templates> (named `default.latex`).
 
-For the full list of Pandoc variables and their meanings, see Pandoc's manual at https://pandoc.org/MANUAL.html#templates.
+For the full list of Pandoc variables and their meanings, see Pandoc's manual at <https://pandoc.org/MANUAL.html#templates>.
 
 ## Control the placement of figures {#figure-placement}
 
 <!-- https://stackoverflow.com/questions/16626462/figure-position-in-markdown-when-converting-to-pdf-with-knitr-and-pandoc/17648350#17648350 -->
+
 <!-- Some of the solutions adapted from https://texfaq.org/FAQ-floats. Link left here for future reference -->
 
 One common frustration with LaTeX is the placement of figures and tables. Unlike in a word processor like Microsoft Word, in which figures are placed directly where the user specifies, LaTeX will attempt to place a figure in a position that does not violate certain typographic rules. In doing so, it can result in figures floating away from where they are referenced in the text. This section will explain some background information on how floating environments (such as figures) work, before providing several options for how to customize their behavior for your work.
@@ -191,27 +194,27 @@ One common frustration with LaTeX is the placement of figures and tables. Unlike
 
 By default, figures with captions are generated with the `figure` environment in LaTeX. For example, Pandoc will convert the following Markdown code that contains an image
 
-```md
+``` {.md}
 ![This is a figure.](images/cool.jpg)
 ```
 
 to the LaTeX code:
 
-```tex
+``` {.tex}
 \begin{figure}
   \includegraphics{images/cool.jpg}
   \caption{This is a figure.}
 \end{figure}
 ```
 
-The `figure` environment is a floating environment. You can read a detailed description of floats at https://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions. In summary, floats are used as containers for things that cannot be broken over a page, such as tables and figures. If the figure or table can not be contained in the space left on the current page, LaTeX will try to place it at the top of the next page. If the figure is tall enough, it may occupy the whole next page, even if there is still space left for a few lines of text. The behavior can be controlled by different placement specifiers in square brackets after `\begin{figure}`, e.g., `\begin{figure}[b]`. Below is a list of possible specifiers:
+The `figure` environment is a floating environment. You can read a detailed description of floats at <https://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions>. In summary, floats are used as containers for things that cannot be broken over a page, such as tables and figures. If the figure or table can not be contained in the space left on the current page, LaTeX will try to place it at the top of the next page. If the figure is tall enough, it may occupy the whole next page, even if there is still space left for a few lines of text. The behavior can be controlled by different placement specifiers in square brackets after `\begin{figure}`, e.g., `\begin{figure}[b]`. Below is a list of possible specifiers:
 
-- `h`: Place the float _here_, i.e., approximately at the same point it occurs in the source text.
-- `t`: Position at the _top_ of the page.
-- `b`: Position at the _bottom_ of the page.
-- `p`: Put on a special _page_ for floats only.
-- `!`: Override internal parameters LaTeX uses for determining "good" float positions.
-- `H`: Place the float at precisely the location in the LaTeX code. This requires the **float** package (`\usepackage{float}`).
+-   `h`: Place the float *here*, i.e., approximately at the same point it occurs in the source text.
+-   `t`: Position at the *top* of the page.
+-   `b`: Position at the *bottom* of the page.
+-   `p`: Put on a special *page* for floats only.
+-   `!`: Override internal parameters LaTeX uses for determining "good" float positions.
+-   `H`: Place the float at precisely the location in the LaTeX code. This requires the **float** package (`\usepackage{float}`).
 
 These specifiers can be used in conjunction, e.g., `!b` forces LaTeX to place the figure at the bottom of a page. The default behavior is `tbp`. That is, LaTeX will try to position the figure at the top of the page, then at the bottom, and then on a separate page.
 
@@ -219,7 +222,7 @@ These specifiers can be used in conjunction, e.g., `!b` forces LaTeX to place th
 
 Many users will initially want to prevent figures from floating in their document, replicating the behavior of a traditional word processor. To do this, we must firstly load the LaTeX package **float**. This can be done by including the following line in the YAML:
 
-```yaml
+``` {.yaml}
 output: 
   pdf_document:
     extra_dependencies: ["float"]
@@ -231,7 +234,9 @@ We can use the chunk option `fig.pos` to control the float behavior, and the use
 knitr::opts_chunk$set(fig.pos = "!H", out.extra = "")
 ```
 
-In general, we do not recommend that users force LaTeX to stop floating figures. This solution was included in this book by popular demand,^[The related Stack Overflow question has been viewed for over 45,000 times: https://stackoverflow.com/q/16626462/559676.] but there could be some serious side-effects when LaTeX is unable to float figures.
+In general, we do not recommend that users force LaTeX to stop floating figures. This solution was included in this book by popular demand,[^2] but there could be some serious side-effects when LaTeX is unable to float figures.
+
+[^2]: The related Stack Overflow question has been viewed for over 45,000 times: <https://stackoverflow.com/q/16626462/559676>.
 
 ### Force floats forwards
 
@@ -239,7 +244,7 @@ In general, we do not recommend that users force LaTeX to stop floating figures.
 
 An alternative to forcing all floats to be held is to force floating forwards in the text. This can remove a common issue, where a figure is shown at the top of the page before the relevant text comes. This can break the reading flow of a report. We can force it so that the figure always appears after the text by using the **flafter** LaTeX package as follows:
 
-```yaml
+``` {.yaml}
 output: 
   pdf_document:
     extra_dependencies: ["flafter"]
@@ -270,7 +275,7 @@ knitr::kable(floatOpts, caption = "Default LaTeX float settings.")
 
 To encourage LaTeX not to move your figures, we can alter these default settings. We could include the following in our LaTeX preamble file, reducing the minimum amount of text required on a page and allow more room for floats:
 
-```tex
+``` {.tex}
 \renewcommand{\topfraction}{.85}
 \renewcommand{\bottomfraction}{.7}
 \renewcommand{\textfraction}{.15}
@@ -285,35 +290,36 @@ If we have added these lines to a `.tex` file, we could include this file in the
 ## Add custom headers and footers {#latex-header}
 
 <!-- https://stackoverflow.com/questions/25329375/creating-a-footer-for-every-page-using-r-markdown -->
+
 <!-- https://tex.stackexchange.com/questions/139139/adding-headers-and-footers-using-pandoc -->
 
-The LaTeX package **fancyhdr** has provided several commands to customize the header and footer lines of your document. For a more complete guide, please refer to the full documentation at https://ctan.org/pkg/fancyhdr. To begin with, we must load the package. Then we can change the header style, e.g.,
+The LaTeX package **fancyhdr** has provided several commands to customize the header and footer lines of your document. For a more complete guide, please refer to the full documentation at <https://ctan.org/pkg/fancyhdr>. To begin with, we must load the package. Then we can change the header style, e.g.,
 
-```tex
+``` {.tex}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 ```
 
 The package offers three different interfaces, but we will use the commands `\fancyhead` and `\fancyfoot`. The syntax for the formatting is `\fancyhead[selectors]{output text}`, whereby the selectors state the part of the header that we wish to customize. We can use the following selectors for the page locators:
 
-- **E** for even pages
-- **O** for odd pages
-- **L** for the left side
-- **C** for the center
-- **R** for the right side
+-   **E** for even pages
+-   **O** for odd pages
+-   **L** for the left side
+-   **C** for the center
+-   **R** for the right side
 
 For example, `\fancyhead[LE,RO]{Your Name}` will print the text "Your Name" on the left side of the header for even pages, and the right side for odd pages. We can combine this with additional LaTeX commands to extract details from our document for each page:
 
-- `\thepage`: the number of the current page.
-- `\thechapter`: the number of the current chapter.
-- `\thesection`: the number of the current section.
-- `\chaptername`: the the word "Chapter" in English, or its equivalent in the current language, or the text that the author specified by redefining this command.
-- `\leftmark`: the name and number of the current top-level structure in uppercase letters.
-- `\rightmark`: the name and number of the current next to top-level structure in uppercase letters.
+-   `\thepage`: the number of the current page.
+-   `\thechapter`: the number of the current chapter.
+-   `\thesection`: the number of the current section.
+-   `\chaptername`: the the word "Chapter" in English, or its equivalent in the current language, or the text that the author specified by redefining this command.
+-   `\leftmark`: the name and number of the current top-level structure in uppercase letters.
+-   `\rightmark`: the name and number of the current next to top-level structure in uppercase letters.
 
 Below is some example LaTeX code that you can add to the preamble using the methods introduced in Section \@ref(latex-preamble):
 
-```latex
+``` {.latex}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 % center of header
@@ -334,7 +340,7 @@ Sometimes you may want to include multiple images in a single figure environment
 
 Sub-figures require the LaTeX package **subfig**. We can load it via the `extra_dependencies` YAML option within the `pdf_document` output. For example:
 
-```yaml
+``` {.yaml}
 ---
 output:
   pdf_document:
@@ -344,13 +350,13 @@ output:
 
 To arrange all plots from a code chunk in sub-figures, you have to use the chunk options `fig.cap` (the caption for the whole figure environment) and `fig.subcap` (a character vector of the captions for sub-figures). For best output, you can also use the following options:
 
-- `fig.ncol`: The number of columns of sub-figures. By default, all plots are arranged in a single row. You can break them into multiple rows.
+-   `fig.ncol`: The number of columns of sub-figures. By default, all plots are arranged in a single row. You can break them into multiple rows.
 
-- `out.width`: The output width of individual plots. You will normally set this to `100%` divided by the number of columns. For example, if you have two plots, the `out.width` option should be equal to or less than `50%`, otherwise the plots may exceed the page margin.
+-   `out.width`: The output width of individual plots. You will normally set this to `100%` divided by the number of columns. For example, if you have two plots, the `out.width` option should be equal to or less than `50%`, otherwise the plots may exceed the page margin.
 
 Below is an illustrative example:
 
-```yaml
+``` {.yaml}
 ---
 output:
   pdf_document:
@@ -358,7 +364,7 @@ output:
 ---
 ```
 
-````md
+```` {.md}
 ```{r fig-sub, fig.cap='All', fig.subcap=c('A', 'B', 'C')}`r ''`
 plot(1:10)
 plot(cars, pch = 19)
@@ -376,14 +382,14 @@ knitr::include_graphics("images/latex-subfig.png", dpi = NA)
 
 If you run into an error like this:
 
-```latex
+``` {.latex}
 ! Package inputenc Error:
   Unicode char \u8: not set up for use with LaTeX.
 ```
 
 it probably means that you are using the default LaTeX engine, `pdflatex`, to render the (intermediate `.tex`) document to PDF, which was unable to process certain Unicode characters in your document. If that is the case, you may switch to `xelatex` or `lualatex`, e.g.,
 
-```yaml
+``` {.yaml}
 output:
   pdf_document:
     latex_engine: xelatex
@@ -391,7 +397,7 @@ output:
 
 You may also change the LaTeX engine for other document output formats, especially those based on `pdf_document`, such as `bookdown::pdf_document2` and `tufte::tufte_handout`, e.g.,
 
-```yaml
+``` {.yaml}
 output:
   bookdown::pdf_document2:
     latex_engine: lualatex
@@ -405,7 +411,7 @@ If you work with pure LaTeX documents primarily, you may still find R Markdown u
 
 When you render an Rmd document to LaTeX, it generates a full LaTeX document that includes the `\documentclass{}`, `\begin{body}`, and `\end{body}`. A LaTeX fragment is basically the body of a full LaTeX document. To render a LaTeX fragment, you may use the `latex_fragment` output format, e.g.,
 
-```yaml
+``` {.yaml}
 ---
 output: latex_fragment
 ---
@@ -419,7 +425,7 @@ By default, Pandoc will preserve raw LaTeX code in Markdown documents when conve
 
 To make sure that Pandoc does not touch the raw LaTeX code in your Markdown document, you may wrap the code in a fenced code block with the attribute `=latex`, e.g.,
 
-````md
+```` {.md}
 ```{=latex}
 \begin{tabular}{ll}
 A & B \\
@@ -440,6 +446,6 @@ The **knitr** package supports a variety of source document formats, including b
 
 The filename usually has the extension `.Rnw`, e.g., the above file is `latex.Rnw`. The idea is the same but the syntax for writing R code chunks and inline R expressions is different. An R code chunk starts with `<<>>=` and ends with `@`. An inline R expression is written in `\Sexpr{}`.
 
-The function `knitr::knit()` can compile an `Rnw` documents to a LaTeX (`.tex`) output file, which can be further compiled to PDF through your LaTeX tools such as `pdflatex`. You can also use `knitr::knit2pdf()` to compile `Rnw` to PDF in one step. If you use RStudio, you can hit the `Compile PDF` button on the toolbar. Please note that the default method to compile Rnw documents is through Sweave, and you may want to change it to **knitr** (see the post http://stackoverflow.com/q/27592837/559676 for how to do that).
+The function `knitr::knit()` can compile an `Rnw` documents to a LaTeX (`.tex`) output file, which can be further compiled to PDF through your LaTeX tools such as `pdflatex`. You can also use `knitr::knit2pdf()` to compile `Rnw` to PDF in one step. If you use RStudio, you can hit the `Compile PDF` button on the toolbar. Please note that the default method to compile Rnw documents is through Sweave, and you may want to change it to **knitr** (see the post <http://stackoverflow.com/q/27592837/559676> for how to do that).
 
 An `Rnw` document gives you the full power of LaTeX. This could be your last resort if there are typesetting problems that are really difficult to solve in Markdown. However, before you drop Markdown, we would like to remind you of the fact that a custom Pandoc LaTeX template may also be helpful (see Section \@ref(latex-template)).

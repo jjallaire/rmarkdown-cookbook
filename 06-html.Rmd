@@ -12,7 +12,7 @@ For beginners, it is extremely important to understand selectors and precedence 
 
 To include one or multiple custom stylesheets in an Rmd document, you can use the `css` option, e.g.,
 
-```yaml
+``` {.yaml}
 output:
   html_document:
     css: "style.css"
@@ -22,7 +22,7 @@ output:
 
 Alternatively, you can use a `css` code chunk to embed the CSS rules directly in your Rmd document, e.g.,
 
-````md
+```` {.md}
 We embed a `css` code chunk here.
 
 ```{css, echo=FALSE}`r ''`
@@ -38,7 +38,7 @@ The chunk option `echo = FALSE` means the CSS code will not be displayed verbati
 
 As an application of the methods mentioned in Section \@ref(html-css), we can use CSS to adjust the alignment of headings. For example, you may center section headings of level 1, 2, and 3 with the CSS code below:
 
-```css
+``` {.css}
 h1, h2, h3 {
   text-align: center;
 }
@@ -50,7 +50,7 @@ Please see Section \@ref(html-css) on how to apply the CSS to your Rmd document.
 
 We mentioned LaTeX templates in Section \@ref(latex-template). You can also specify a custom HTML template for Pandoc to convert Markdown to HTML. Below is a brief example template:
 
-```html
+``` {.html}
 <html>
   <head>
     <title>$title$</title>
@@ -64,11 +64,11 @@ We mentioned LaTeX templates in Section \@ref(latex-template). You can also spec
 </html>
 ```
 
-You can see that the template contains a few variables such as `$title$` and `$body$`. You can find the full list of Pandoc variables and their meanings at https://pandoc.org/MANUAL.html#templates.
+You can see that the template contains a few variables such as `$title$` and `$body$`. You can find the full list of Pandoc variables and their meanings at <https://pandoc.org/MANUAL.html#templates>.
 
 The template gives you the ultimate power to customize the HTML output. For example, you can include arbitrary CSS stylesheets or JavaScript code or libraries in the `<head>` area. For example, we could use a Boolean variable `draft` to indicate whether the document is a draft or a final version:
 
-```html
+``` {.html}
 <head>
 <style type="text/css">
 .logo {
@@ -94,7 +94,7 @@ $body$
 
 Then we can set the variable `draft` to `true` or `false` in the YAML metadata of the Rmd document, e.g.,
 
-```yaml
+``` {.yaml}
 ---
 title: "An Important Report"
 draft: true
@@ -103,7 +103,7 @@ draft: true
 
 To apply a template to an Rmd document, you can save the template to a file, and pass the file path to the `template` option of `html_document`, e.g.,
 
-```yaml
+``` {.yaml}
 output:
   html_output:
     template: my-template.html
@@ -127,8 +127,7 @@ Below is an example using the chunk options `class.source = "bg-danger"` and `cl
 knitr::include_graphics("images/chunk-bg.png", dpi = NA)
 ```
 
-You can also use arbitrary class names and define CSS rules accordingly. In this case, you will have to include your custom CSS rules using the methods mentioned in Section \@ref(html-css).
-Below is an example:
+You can also use arbitrary class names and define CSS rules accordingly. In this case, you will have to include your custom CSS rules using the methods mentioned in Section \@ref(html-css). Below is an example:
 
 `r import_example('chunk-custom.Rmd')`
 
@@ -144,13 +143,13 @@ If you want all code chunks in the document to use the custom style, you can set
 knitr::opts_chunk$set(class.source='watch-out')
 ```
 
-If you want to decorate individual elements in code blocks instead of the whole blocks, you may consider using the **flair** package: https://github.com/kbodwin/flair. With this package, you can highlight different parts of your code (such as fixed strings, function names, and arguments) with custom styles (e.g., color, font size, and/or font weight).
+If you want to decorate individual elements in code blocks instead of the whole blocks, you may consider using the **flair** package: <https://github.com/kbodwin/flair>. With this package, you can highlight different parts of your code (such as fixed strings, function names, and arguments) with custom styles (e.g., color, font size, and/or font weight).
 
 ## Scrollable code blocks {#html-scroll}
 
 When you have large amounts of code and/or verbatim text output to display on an HTML page, it may be desirable to limit their heights, otherwise the page may look overwhelmingly lengthy, which will make it difficult for those who do not want to read the details in the code or its text output to skip these parts. There are multiple ways to solve this problem. One solution is to use the `code_fold` option in the `html_document` format, which will fold code blocks in the output and readers can unfold them by clicking a button.
 
-```yaml
+``` {.yaml}
 output:
   html_document:
     code_fold: hide
@@ -174,7 +173,7 @@ If you want to specify different maximum heights for individual code blocks, you
 
 If code blocks in the output document are potentially distracting to readers, you may choose to fold them initially, and readers can choose to display them by clicking the fold buttons:
 
-```yaml
+``` {.yaml}
 output:
   html_document:
     code_fold: hide
@@ -182,7 +181,7 @@ output:
 
 You can also choose to unfold all code blocks initially (so readers can choose to fold them later):
 
-```yaml
+``` {.yaml}
 output:
   html_document:
     code_fold: show
@@ -194,7 +193,7 @@ If you fold all code blocks initially, you can specify certain blocks to be unfo
 
 You can also do it the other way around, i.e., show all code blocks but hide some of them initially. For example:
 
-````md
+```` {.md}
 ---
 output:
   html_document:
@@ -228,7 +227,7 @@ knitr::include_graphics("images/html-tabs.png", dpi = NA)
 
 You can add another attribute `.tabset-pills` to the upper-level section header to add a "pill" effect to the tab, and the tab will have a dark blue background.
 
-```md
+``` {.md}
 ## Results {.tabset .tabset-pills}
 ```
 
@@ -236,7 +235,7 @@ By default, the first tab is active (i.e., displayed). If you want a different t
 
 To end the tabset, you need to start a new section header of the upper level. The new section header can be empty, e.g.,
 
-```md
+``` {.md}
 ## Results {.tabset}
 
 ### Tab One
@@ -253,7 +252,7 @@ we can end the tabset and continue to write more paragraphs.
 
 When you share an HTML output page with others, they may want the Rmd source file, too. For example, they may want to change the Rmd source and compile the report by themselves. You can use the option `code_download` to embed a copy of the Rmd source file in the HTML output file:
 
-```yaml
+``` {.yaml}
 output:
   html_document:
     code_download: true
@@ -271,7 +270,7 @@ xfun::pkg_load2(c('base64enc', 'htmltools', 'mime'))
 
 Then you can use one of the functions `xfun::embed_file()`, `xfun::embed_dir()`, or `xfun::embed_files()` in an R code chunk to embed one or multiple files or an entire directory in the HTML output, e.g.,
 
-````md
+```` {.md}
 ```{r echo=FALSE}`r ''`
 # a single file
 xfun::embed_file('source.Rmd')
@@ -293,13 +292,13 @@ xfun::embed_files(list.files('.', '[.](Rmd|csv)$'))
 
 For multiple files, they are first compressed to a zip file, and the zip file will be embedded. These functions return a link, which a reader can click on the HTML page to download the embedded file.
 
-You can learn more technical details behind these functions from the help page `?xfun::embed_file` or the blog post at https://yihui.org/en/2018/07/embed-file/. Based on the same idea, the **downloadthis** package (https://github.com/fmmattioni/downloadthis) has implemented download buttons, so that users can click buttons to download files instead of links. If you prefer using buttons, you may consider using this package.
+You can learn more technical details behind these functions from the help page `?xfun::embed_file` or the blog post at <https://yihui.org/en/2018/07/embed-file/>. Based on the same idea, the **downloadthis** package (<https://github.com/fmmattioni/downloadthis>) has implemented download buttons, so that users can click buttons to download files instead of links. If you prefer using buttons, you may consider using this package.
 
 ## Include the content of an existing HTML file {#include-html}
 
 With the `includes` option of the `html_document` format (or any other formats that support this option), you can include the content of an existing HTML file into the HTML output document in three possible places: the `<head>` area, the beginning of `<body>`, and the end of `</body>`.
 
-```yaml
+``` {.yaml}
 output:
   html_document:
     includes:
@@ -312,13 +311,13 @@ If you are not familiar with HTML, Section \@ref(html-template) may help you bet
 
 With the `in_header` option, you can inject CSS and JavaScript code into the `<head>` tag. With `before_body`, you may include a header that shows a banner or logo. With `after_body`, you can include a footer, e.g.,
 
-```html
+``` {.html}
 <div class="footer">Copyright &copy; John Doe 2020</div>
 ```
 
 Sometimes you may want to include the content of an external HTML file in an arbitrary place of the body, which can be done with `htmltools::includeHTML()`. You pass the path of the HTML file to this function. It will read the file, and write its content to the output document. You may also use the technique in Section \@ref(raw-content), e.g.,
 
-`````md
+````` {.md}
 ````{=html}
 ```{r, echo=FALSE, results='asis'}`r ''`
 xfun::file_string('file.html')
@@ -328,7 +327,7 @@ xfun::file_string('file.html')
 
 Please note that you must not include the content of a full HTML file into another HTML file, but can only include an HTML fragment. A full HTML file contains the `<html>` tag, which cannot be embedded in another `<html>` tag. Below is an invalid HTML document when a full HTML document is included in another HTML document:
 
-```html
+``` {.html}
 <html>
   <head>  </head>
 
@@ -393,11 +392,11 @@ Below is the full source Rmd document that includes the JavaScript code to find 
 
 You may try to adapt the JavaScript code above to your own need. The key is to find out the elements to be wrapped into `<details>`:
 
-```js
+``` {.js}
 document.querySelectorAll('pre:not([class])');
 ```
 
-The CSS selector `pre:not([class])` means all `<pre>` elements without the `class` attribute. You can also select other types of elements. For more about CSS selectors, see https://www.w3schools.com/css/css_selectors.asp. For more about the HTML tags `<details>` and `<summary>`, see https://www.w3schools.com/tags/tag_details.asp.
+The CSS selector `pre:not([class])` means all `<pre>` elements without the `class` attribute. You can also select other types of elements. For more about CSS selectors, see <https://www.w3schools.com/css/css_selectors.asp>. For more about the HTML tags `<details>` and `<summary>`, see <https://www.w3schools.com/tags/tag_details.asp>.
 
 ## For hardcore HTML users {#html-hardcore}
 
