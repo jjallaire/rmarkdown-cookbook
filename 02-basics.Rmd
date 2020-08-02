@@ -6,9 +6,9 @@ For those seeking lower-level basics, please read Chapter 2 of the R Markdown De
 
 ## The R Markdown process {#rmarkdown-process}
 
-R Markdown combines several different processes together to create documents, and one of the main sources of confusion from R Markdown is how all the components work together.[^1] Fortunately, as a user, it is not essential to understand all the inner workings of these processes to be able to create documents. However, as a user who may be seeking to alter the behavior of a document, it is important to understand which component is responsible for what. This makes it a lot easier to seek help as you can target your searches on the correct area.
+R Markdown combines several different processes together to create documents, and one of the main sources of confusion from R Markdown is how all the components work together.[^basics-1] Fortunately, as a user, it is not essential to understand all the inner workings of these processes to be able to create documents. However, as a user who may be seeking to alter the behavior of a document, it is important to understand which component is responsible for what. This makes it a lot easier to seek help as you can target your searches on the correct area.
 
-[^1]: Allison Horst has created an amusing artwork that describes the R Markdown process as wizardry: <https://github.com/allisonhorst/stats-illustrations/raw/master/rstats-artwork/rmarkdown_wizards.png>.
+[^basics-1]: Allison Horst has created an amusing artwork that describes the R Markdown process as wizardry: <https://github.com/allisonhorst/stats-illustrations/raw/master/rstats-artwork/rmarkdown_wizards.png>.
 
 The basic workflow structure for an R Markdown document is shown in Figure \@ref(fig:rmdworkflow), highlighting the steps (arrows) and the intermediate files that are created before producing the output. The whole process is implemented via the function `rmarkdown::render()`. Each stage is explained in further detail below.
 

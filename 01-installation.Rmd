@@ -48,9 +48,9 @@ rmarkdown::find_pandoc(version = '2.9.1')
 
 If you would like to create PDF documents from R Markdown, you will need to have a LaTeX distribution installed. Although there are several traditional options including MiKTeX, MacTeX, and TeX Live, we recommend that R Markdown users install [TinyTeX](https://yihui.org/tinytex/).
 
-TinyTeX is a custom LaTeX distribution based on TeX Live that is small in size (150Mb on macOS/Linux and 220Mb on Windows when installed) but functions well in most cases, especially for R users. Installing or running TinyTeX does not require sysadmin privileges.[^1] You can install TinyTeX with the R package **tinytex** [@R-tinytex]:
+TinyTeX is a custom LaTeX distribution based on TeX Live that is small in size (150Mb on macOS/Linux and 220Mb on Windows when installed) but functions well in most cases, especially for R users. Installing or running TinyTeX does not require sysadmin privileges.[^installation-1] You can install TinyTeX with the R package **tinytex** [@R-tinytex]:
 
-[^1]: Actually, we recommend that you **do not** use your root privilege (i.e., `sudo`) to install TinyTeX on Linux or macOS, if you are the only user of your system.
+[^installation-1]: Actually, we recommend that you **do not** use your root privilege (i.e., `sudo`) to install TinyTeX on Linux or macOS, if you are the only user of your system.
 
 ```{r eval=FALSE}
 tinytex::install_tinytex()

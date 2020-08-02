@@ -87,7 +87,7 @@ knitr::kable(iris2, align = 'lccrr')
 
 ### Add a table caption {#kable-caption}
 
-You can add a caption to the table via the `caption` argument, e.g. (see Table \@ref(tab:kable-cap) for the output),
+You can add a caption to the table via the `caption` argument, e.g. (see Table \@ref(tab:kable-cap) for the output),
 
 ```{r kable-cap}
 knitr::kable(iris2, caption = 'An example table caption.')
@@ -287,7 +287,7 @@ knitr::kable(iris2, caption = 'A long long long caption!', caption.short = 'A sh
 
 The short caption goes into the square brackets of the `\caption[]{}` command in LaTeX, and is often used in the List of Tables of the PDF output document (if the short caption is not provided, the full caption is displayed there).
 
-If you are familiar with the LaTeX package **[booktabs](https://ctan.org/pkg/booktabs)** for publication quality tables, you can set `booktabs = TRUE`, e.g.,
+If you are familiar with the LaTeX package [**booktabs**](https://ctan.org/pkg/booktabs) for publication quality tables, you can set `booktabs = TRUE`, e.g.,
 
 ```{r, render=if (!knitr::is_latex_output()) kat, comment='', class.output='tex'}
 iris3 = head(iris, 10)
@@ -312,7 +312,7 @@ For `booktabs = TRUE`:
 knitr::kable(iris3, format = 'latex', linesep = c('', '', '\\addlinespace'), booktabs = TRUE)
 ```
 
-Sometimes your table may be longer than a page. In this case, you can use the argument `longtable = TRUE`, which uses the LaTeX package **[longtable](https://ctan.org/pkg/longtable)** to span your table to multiple pages.
+Sometimes your table may be longer than a page. In this case, you can use the argument `longtable = TRUE`, which uses the LaTeX package [**longtable**](https://ctan.org/pkg/longtable) to span your table to multiple pages.
 
 Tables are center-aligned by default when they are included in a table environment (i.e., when the table has a caption). If you do not want to center a table, use the argument `centering = FALSE`.
 
@@ -429,9 +429,9 @@ You will not see any differences in the above two tables if you are viewing the 
 
 ## Other packages for creating tables {#table-other}
 
-There are many other R packages that can be used to generated tables. The main reason that I introduced `kable()` (Section \@ref(kable)) and **kableExtra** (Section \@ref(kableextra)) is not that they are better than other packages, but I'm only familiar with them.[^1] Next I will list the packages that I'm aware of but not very familiar with. You can check them out by yourself, and decide which one fits your purpose best.
+There are many other R packages that can be used to generated tables. The main reason that I introduced `kable()` (Section \@ref(kable)) and **kableExtra** (Section \@ref(kableextra)) is not that they are better than other packages, but I'm only familiar with them.[^tables-1] Next I will list the packages that I'm aware of but not very familiar with. You can check them out by yourself, and decide which one fits your purpose best.
 
-[^1]: Frankly speaking, I rarely use tables by myself, so I'm not highly motivated to learn how to create sophisticated tables.
+[^tables-1]: Frankly speaking, I rarely use tables by myself, so I'm not highly motivated to learn how to create sophisticated tables.
 
 -   **flextable** and **huxtable**: If you are looking for a table package that supports the widest range of output formats, **flextable** and **huxtable** are probably the two best choices. They all support HTML, LaTeX, and Office formats, and contain most common table features (e.g., conditional formatting). More information about **flextable** can be found at <https://davidgohel.github.io/flextable/>, and the documentation of **huxtable** is at <https://hughjonesd.github.io/huxtable/>.
 

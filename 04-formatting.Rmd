@@ -62,9 +62,9 @@ This method may be a little advanced for R users because it involves another pro
 
 `r import_example('font-color.Rmd')`
 
-In this example, we implicitly used a Pandoc Markdown extension named `bracketed_spans`, which allows us to write text with attributes, e.g., `[text]{.class attribute="value"}`. The Lua filter defined in the `cat` code chunk[^1] puts text in `<span style="color: ..."></span>` if the output format is HTML, and in `\textcolor{...}{}` if the output format is LaTeX. The Lua filter is written to a file `color-text.lua`, and enabled through the command-line option `--lua-filter` passed to Pandoc via the `pandoc_args` option of the output formats.
+In this example, we implicitly used a Pandoc Markdown extension named `bracketed_spans`, which allows us to write text with attributes, e.g., `[text]{.class attribute="value"}`. The Lua filter defined in the `cat` code chunk[^formatting-1] puts text in `<span style="color: ..."></span>` if the output format is HTML, and in `\textcolor{...}{}` if the output format is LaTeX. The Lua filter is written to a file `color-text.lua`, and enabled through the command-line option `--lua-filter` passed to Pandoc via the `pandoc_args` option of the output formats.
 
-[^1]: If you are not familiar with `cat` code chunks, please see Section \@ref(eng-cat).
+[^formatting-1]: If you are not familiar with `cat` code chunks, please see Section \@ref(eng-cat).
 
 Compared to the previous method, the advantage of using the Lua filter is that you can still use Markdown syntax inside the brackets, whereas using the R function `colorize()` in the previous section does not allow Markdown syntax.
 
@@ -74,9 +74,9 @@ Compared to the previous method, the advantage of using the Lua filter is that y
 
 <!-- SOLUTION: https://rmarkdown.rstudio.com/authoring_pandoc_markdown.html%23raw-tex#line_blocks -->
 
-As mentioned in Section \@ref(linebreaks), whitespaces are often meaningless in Markdown. Markdown will also ignore spaces used for indentation by default. However, we may want to keep the indentation in certain cases, e.g., in verses and addresses. In these situations, we can use line blocks by starting the line with a vertical bar (`|`). The linebreaks and any leading spaces will be preserved in the output. For example:[^2]
+As mentioned in Section \@ref(linebreaks), whitespaces are often meaningless in Markdown. Markdown will also ignore spaces used for indentation by default. However, we may want to keep the indentation in certain cases, e.g., in verses and addresses. In these situations, we can use line blocks by starting the line with a vertical bar (`|`). The linebreaks and any leading spaces will be preserved in the output. For example:[^formatting-2]
 
-[^2]: This is a limerick written by Claus Ekstrøm: <https://yihui.org/en/2018/06/xaringan-math-limerick/>.
+[^formatting-2]: This is a limerick written by Claus Ekstrøm: <https://yihui.org/en/2018/06/xaringan-math-limerick/>.
 
 ``` {.md}
 | When dollars appear it's a sign

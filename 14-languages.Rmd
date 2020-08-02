@@ -59,9 +59,9 @@ Hello, **knitr** engines!
 ```
 :::
 
-Next we show an example of an alternative Python engine[^1] named `py` and implemented by simply calling the `python` command via `system2()`:
+Next we show an example of an alternative Python engine[^languages-1] named `py` and implemented by simply calling the `python` command via `system2()`:
 
-[^1]: In practice, you should use the built-in `python` engine instead, which is based on the **reticulate** package and supports Python code chunks much better.
+[^languages-1]: In practice, you should use the built-in `python` engine instead, which is based on the **reticulate** package and supports Python code chunks much better.
 
 ```{r, tidy=FALSE}
 knitr::knit_engines$set(py = function(options) {
