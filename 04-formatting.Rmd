@@ -256,7 +256,7 @@ if (TRUE) {
 
 Typically we write code chunks and inline expressions that we want to be parsed and evaluated by **knitr**. However, if you are trying to write a tutorial on using **knitr**, you may need to generate verbatim code chunk or inline expression that is *not* parsed by **knitr**, and we want to display the content of the chunk header.
 
-Unfortunately, we can't wrap the code chunk in another layer of backticks, but instead we must make the code chunk invalid within the source code by inserting "`` `r ''` `` to the chunk header. This will be evaluated as an inline expression to *an empty string* by **knitr**. For this example, the following"code chunk\" in the source document:
+Unfortunately, we can't wrap the code chunk in another layer of backticks, but instead we must make the code chunk invalid within the source code by inserting "`` `r ''` `` to the chunk header. This will be evaluated as an inline expression to *an empty string* by **knitr**. For this example, the following"code chunk" in the source document:
 
 ```{r echo = FALSE, comment = NA}
 cat("`r ''````{r, eval=TRUE}
